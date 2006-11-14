@@ -1,0 +1,8 @@
+Miaow is a reworked and improved version of the content management system
+(CMS) originally developed for http://rain.ifmo.ru/cat/ website.
+
+Key highlights:
+- powerful features like keyword search,
+  article dependency analysis, user interaction
+- convenient site management
+- standards compliance
