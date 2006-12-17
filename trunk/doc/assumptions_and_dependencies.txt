@@ -1,0 +1,2 @@
+DE-1: Site will be hosted on a server with Apache,
+      PHP with PEAR::DB, and MySQL.
