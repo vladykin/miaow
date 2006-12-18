@@ -1,2 +1,2 @@
 NR-1:
-    95% of site pages requested should be generated in less than 5 seconds.
+    95% of site page requests should be served in less than 5 seconds.
