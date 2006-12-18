@@ -1,0 +1,11 @@
+BO-1:
+    Make a flexible CMS, easily extended with new types of pages. Creating
+    new page type shouldn't require changes to the database schema. All
+    code related to new page type should be incapsulated in single class.
+
+BO-2:
+    Make a user-friendly interface. 95% of user operations should be
+    accomplished without questions.
+
+BO-3:
+    The site should be powered with a search system.
