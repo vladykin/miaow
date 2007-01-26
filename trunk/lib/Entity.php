@@ -1,14 +1,14 @@
 <?php
 
-// $Id:$
+// $Id$
 
 require_once('lib/Storage.php');
 
 class Field {
-    private $name;
-    private $decl;
-    private $indexed;
-    public function Field($name, $decl, $indexed = false) {
+    var $name;
+    var $decl;
+    var $indexed;
+    function Field($name, $decl, $indexed = false) {
         assert('is_string($name) && strlen($name) > 0');
         assert('is_string($decl) && strlen($decl) > 0');
         assert('is_bool($indexed)');
@@ -16,91 +16,93 @@ class Field {
         $this->decl = $decl;
         $this->indexed = $indexed;
     }
-    public function getName() {
+    function getName() {
         return $this->name;
     }
-    public function getDecl() {
+    function getDecl() {
         return $this->decl;
     }
-    public function isIndexed() {
+    function isIndexed() {
         return $this->indexed;
     }
-    public function getGetter() {
+    function getGetter() {
         return 'get' . ucfirst($this->name);
     }
-    public function getSetter() {
+    function getSetter() {
         return 'set' . ucfirst($this->name);
     }
-    public function encode($value) {
-        return (string)$value;
+    function encode($value) {
+        return isset($value)? (string)$value : null;
     }
-    public function decode($value) {
+    function decode($value) {
         return $value;
     }
 }
 
 class IntField extends Field {
-    public function IntField($name, $decl, $indexed = false) {
+    function IntField($name, $decl, $indexed = false) {
         assert('is_string($name) && strlen($name) > 0');
         assert('is_string($decl) && strlen($decl) > 0');
         assert('is_bool($indexed)');
         parent::Field($name, $decl, $indexed);        
     }
-    public function decode($value) {
+    function decode($value) {
         assert('preg_match(\'/^[\+\-]?\d+$/\', $value)');
         return (int)$value;
     }
 }
 
 class BoolField extends Field {
-    public function BoolField($name, $decl, $indexed = false) {
+    function BoolField($name, $decl, $indexed = false) {
         assert('is_string($name) && strlen($name) > 0');
         assert('is_string($decl) && strlen($decl) > 0');
         assert('is_bool($indexed)');
         parent::Field($name, $decl, $indexed);
     }
-    public function encode($value) {
+    function encode($value) {
         assert('is_bool($value)');
         return (int)$value;
     }
-    public function decode($value) {
+    function decode($value) {
         assert('$value === \'0\' || $value === \'1\'');
         return $value === '1';
     }
 }
 
 class TextField extends Field {
-    public function TextField($name, $decl, $indexed = false) {
+    function TextField($name, $decl, $indexed = false) {
         assert('is_string($name) && strlen($name) > 0');
         assert('is_string($decl) && strlen($decl) > 0');
         assert('is_bool($indexed)');
         parent::Field($name, $decl, $indexed);
     }
-    public function encode($value) {
-        return iconv('UTF-8', DB_CHARSET, $value);
+    function encode($value) {
+        return isset($value)?
+            iconv('UTF-8', DB_CHARSET, $value) : null;
     }
-    public function decode($value) {
-        return iconv(DB_CHARSET, 'UTF-8', $value);
+    function decode($value) {
+        return isset($value)?
+            iconv(DB_CHARSET, 'UTF-8', $value) : null;
     }
 }
 
 class SerializedField extends Field {
-    public function SerializedField($name, $decl) {
+    function SerializedField($name, $decl) {
         // serialized field can't be indexed
         assert('is_string($name) && strlen($name) > 0');
         assert('is_string($decl) && strlen($decl) > 0');
         parent::Field($name, $decl, false);
     }
-    public function encode($value) {
+    function encode($value) {
         return serialize($value);
     }
-    public function decode($value) {
+    function decode($value) {
         return unserialize($value);
     }
 }
 
 class ForeignKeyField extends Field {
-    public function ForeignKeyField($name, $foreignClass) {
+    function ForeignKeyField($name, $foreignClass) {
         assert('is_string($name) && strlen($name) > 0');
         assert('is_string($foreignClass) && class_exists($foreignClass)');
         eval('$foreignPK = ' . $foreignClass . '::getPrimaryKeyField();');
@@ -109,11 +111,17 @@ class ForeignKeyField extends Field {
 }
 
 
-abstract class Entity {
-    public static abstract function getTableName();
-    public static abstract function getFields();
-    public static abstract function getPrimaryKeyField();
-    public static function getField($className, $fieldName) {
+class Entity {
+    function getTableName() {
+        die('abstract function Entity::getTableName()');
+    }
+    function getFields() {
+        die('abstract function Entity::getFields()');
+    }
+    function getPrimaryKeyField() {
+        die('abstract function Entity::getPrimaryKeyField()');
+    }
+    function getField($className, $fieldName) {
         assert('is_string($className) && class_exists($className)');
         assert('is_string($fieldName) && strlen($fieldName) > 0');
         eval('$fields = ' . $className . '::getFields();');
@@ -129,7 +137,7 @@ abstract class Entity {
 
 class EntityManager {
 
-    public static function decode($row, $entityClass) {
+    function decode($row, $entityClass) {
         assert('is_array($row)');
         assert('is_string($entityClass) && class_exists($entityClass)');
         $entity = new $entityClass();
@@ -143,11 +151,12 @@ class EntityManager {
         return $entity;
     }
 
-    public static function find($entityClass, $id) {
+    function find($entityClass, $id) {
         assert('is_string($entityClass) && class_exists($entityClass)');
         assert('is_int($id) || is_string($id)');
         $db =& Storage::getConnection();
-        $query = 'SELECT * FROM `' . $entityClass . '` WHERE id = ?';
+        eval('$tableName = ' . $entityClass . '::getTableName();');
+        $query = 'SELECT * FROM `' . $tableName . '` WHERE id = ?';
         $res =& $db->getRow($query, array($id));
         assert('!DB::isError($res)');
         if (is_array($res)) {
@@ -157,17 +166,18 @@ class EntityManager {
         }
     }
 
-    public static function persist(Entity &$entity) {
-//        assert('is_object($entity)');
+    function persist(/*Entity */&$entity) {
+        assert('is_object($entity)');
         $entityClass = get_class($entity);
         $db =& Storage::getConnection();
+        eval('$tableName = ' . $entityClass . '::getTableName();');
         eval('$fields = ' . $entityClass . '::getFields();');
         if (($id = $entity->getId()) == 0) {
-            $id =& $db->nextId($entityClass, false);
+            $id =& $db->nextId($tableName, false);
             assert('!DB::isError($id)');
             $entity->setId($id);
             $query = 'INSERT INTO ! VALUES (';
-            $args = array($entityClass);
+            $args = array($tableName);
             $first = true;
             foreach ($fields as $field) {
                 $fieldName = $field->getName();
@@ -185,7 +195,7 @@ class EntityManager {
             assert('!DB::isError($res)');
         } else {
             $query = 'UPDATE ! SET ';
-            $args = array($entityClass);
+            $args = array($tableName);
             $first = true;
             foreach ($fields as $field) {
                 $fieldName = $field->getName();
@@ -208,22 +218,24 @@ class EntityManager {
         }
     }
 
-    public static function remove(Entity &$entity) {
-//        assert('is_object($entity)');
+    function remove(/*Entity */&$entity) {
+        assert('is_object($entity)');
         assert('$entity->getId() > 0');
         $db =& Storage::getConnection();
+        eval('$tableName = ' . get_class($entity) . '::getTableName();');
         $query = 'DELETE FROM ! WHERE `id` = ?';
-        $res =& $db->query($query, array(get_class($entity), $entity->getId()));
+        $res =& $db->query($query, array($tableName, $entity->getId()));
         assert('!DB::isError($res)');
         $entity->setId(0);
     }
 
-    public static function installEntityClass($entityClass) {
+    function installEntityClass($entityClass) {
         assert('is_string($entityClass) && class_exists($entityClass)');
         $db =& Storage::getConnection();
+        eval('$tableName = ' . $entityClass . '::getTableName();');
         eval('$fields = ' . $entityClass . '::getFields();');
         eval('$pk = ' . $entityClass . '::getPrimaryKeyField();');
-        $query = 'CREATE TABLE `' . $entityClass . '` (';
+        $query = 'CREATE TABLE `' . $tableName . '` (';
         foreach ($fields as $field) {
             $query .= '`' . $field->getName() . '` ' . $field->getDecl() . ', ';
         }
@@ -236,15 +248,17 @@ class EntityManager {
         $query .= ')';
         $res =& $db->query($query);
         assert('!DB::isError($res)');
-        $res =& $db->createSequence($entityClass);
+        $res =& $db->createSequence($tableName);
         assert('!DB::isError($res)');
     }
 
-    public static function uninstallEntityClass($entityClass) {
+    function uninstallEntityClass($entityClass) {
         assert('is_string($entityClass)');
         $db =& Storage::getConnection();
-        $res =& $db->query('DROP TABLE `' . $entityClass . '`');
-        $db->dropSequence($entityClass);
+        eval('$tableName = ' . $entityClass . '::getTableName();');
+        $res =& $db->query('DROP TABLE `' . $tableName . '`');
+        assert('!DB::isError($res) || $res->getCode() == DB_ERROR_NOSUCHTABLE');
+        $db->dropSequence($tableName);
     }
 
 }
