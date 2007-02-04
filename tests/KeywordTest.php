@@ -9,7 +9,7 @@ require_once('lib/Keyword.php');
 /**
  * Test class for Keyword.
  */
-class KeywordTest extends PHPUnit_TestCase {
+class tests_KeywordTest extends PHPUnit_TestCase {
 
     function setUp() {
         EntityManager::installEntityClass('Keyword');

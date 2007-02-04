@@ -9,7 +9,7 @@ require_once('lib/User.php');
 /**
  * Test class for User.
  */
-class UserTest extends PHPUnit_TestCase {
+class tests_UserTest extends PHPUnit_TestCase {
 
     function setUp() {
         EntityManager::installEntityClass('User');

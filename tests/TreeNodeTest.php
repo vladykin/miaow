@@ -9,7 +9,7 @@ require_once('lib/TreeNode.php');
 /**
  * Test class for TreeNode.
  */
-class TreeNodeTest extends PHPUnit_TestCase {
+class tests_TreeNodeTest extends PHPUnit_TestCase {
 
     function setUp() {
         EntityManager::installEntityClass('TreeNode');

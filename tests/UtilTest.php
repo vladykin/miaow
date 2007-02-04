@@ -9,7 +9,7 @@ require_once('lib/Util.php');
 /**
  * Test class for Util.
  */
-class UtilTest extends PHPUnit_TestCase {
+class tests_UtilTest extends PHPUnit_TestCase {
 
     function testIsValidName() {
         $this->assertTrue(Util::isValidName('x'));
