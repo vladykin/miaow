@@ -9,7 +9,7 @@ require_once('lib/Cache.php');
 /**
  * Test class for Cache.
  */
-class CacheTest extends PHPUnit_TestCase {
+class tests_CacheTest extends PHPUnit_TestCase {
 
     function setUp() {
         Cache::install();
