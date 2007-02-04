@@ -1,0 +1,13 @@
+#summary What you need to run Miaow
+
+You need a hosting with:
+  * PHP 4 (PHP 5 will probably work too, but not guaranteed),
+  * PEAR with DB package,
+  * MySQL,
+  * (optionally) PHPUnit 1.3.2 to run unit tests.
+
+Most Linux boxes already have all these installed, except PHPUnit. Here are two ways to get it:
+  * install it with PEAR installer (see instructions [http://www.phpunit.de/pocket_guide/3.0/en/appendixes.phpunit1.html here]),
+  * download it from http://pear.phpunit.de/get/PHPUnit-1.3.2.tgz and extract PHPUnit.php and PHPUnit/ directory into Miaow directory.
+
+On Windows you may use one of those all-on-one web-server distributions, for example [http://vertrigo.sourceforge.net/ VertrigoServ]. In this case PEAR packages have to be installed manually.
