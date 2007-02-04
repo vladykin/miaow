@@ -1,0 +1,7 @@
+#summary Miaow project vision
+
+= Miaow project vision =
+
+Miaow is a reworked and improved version of the content management system (CMS) originally developed for the [http://rain.ifmo.ru/cat/ CAT] website.
+
+Miaow is designed to be simple and beautiful (inside and outside).
