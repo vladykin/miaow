@@ -2,11 +2,10 @@
 
 // $Id$
 
-require_once('lib/Config.php');
+require_once('config.php');
 require_once('lib/Tree.php');
 require_once('lib/HandlerFactory.php');
 require_once('lib/HTTP.php');
-require_once('lib/MessageLog.php');
 require_once('lib/Users.php');
 
 session_start();
