@@ -3,7 +3,7 @@
 // $Id$
 
 define('TEST', true);
-require_once('lib/Config.php');
+require_once('config.php');
 
 require_once('PHPUnit.php');
 require_once('PHPUnit/GUI/HTML.php');
