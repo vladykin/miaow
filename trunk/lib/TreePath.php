@@ -98,18 +98,6 @@ class TreePath {
     function toURL() {
         return rtrim(TREE_ROOT . '/' . $this->toString(), '/');
     }
-    
-    /**
-     * @access public
-     * @return TreePath
-     */
-    function &clone() {
-        $nodes = array();
-        for ($i = 0; $i < $this->getNodeCount(); ++$i) {
-            $nodes[] =& $this->getNode($i);
-        }
-        return new TreePath($nodes);
-    }
 
 }
 
