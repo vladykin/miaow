@@ -21,12 +21,12 @@ EntityManager::installEntityClass('Keyword');
 EntityManager::uninstallEntityClass('User');
 EntityManager::installEntityClass('User');
 
-$root =& new TreeNode();
+$root = new TreeNode();
 $root->setName('root');
 $root->setTitle('Root node');
 $root->setTypeName('Article');
-$root->setVisible(false);
-$root->setOwnDirectory(true);
+$root->setIsVisible(true);
+$root->setHasOwnDir(true);
 $root->setProperty('file', 'index.html');
 EntityManager::persist($root);
 
@@ -36,7 +36,7 @@ RelationManager::installRelationClass('Provides');
 RelationManager::uninstallRelationClass('Requires');
 RelationManager::installRelationClass('Requires');
 
-$user =& new User();
+$user = new User();
 $user->setName('Guest');
 $user->setEmail('guest@guest.com');
 $user->setPassword('guest');
