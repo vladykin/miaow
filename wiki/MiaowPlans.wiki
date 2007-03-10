@@ -1,0 +1,12 @@
+#summary Miaow plans and current activities
+
+= Current activities =
+
+*Goal*: implement all CAT functionality by the end of March.
+  * Administrative interface - page creation, editing, moving, deleting.
+  * Voting
+  * Feedback page
+  * Lecture claims page
+
+= Future plans =
+  * Migrate from PEAR::DB to PDO
