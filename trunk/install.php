@@ -42,6 +42,12 @@ $user->setEmail('guest@guest.com');
 $user->setPassword('guest');
 EntityManager::persist($user);
 
+$user = new User();
+$user->setName('Admin');
+$user->setEmail('admin@admin.com');
+$user->setPassword('admin');
+EntityManager::persist($user);
+
 RelationManager::uninstallRelationClass('CreatedBy');
 RelationManager::installRelationClass('CreatedBy');
 
