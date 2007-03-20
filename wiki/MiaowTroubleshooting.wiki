@@ -1,0 +1,7 @@
+#summary Descriptions of common troubles and their solutions.
+
+= When nothing works and even the tests fail =
+
+First of all, check `DB_CHARSET` value you set in `config.php`.
+  * It must be the name of charset in which PHP gets data from database.
+  * It must be something that `iconv` function can understand.
