@@ -1,5 +1,7 @@
 <?php
 
+// $Id$
+
 require_once('config.php');
 
 require_once('lib/Storage.php');
@@ -27,20 +29,34 @@ $handler =& HandlerFactory::getHandler($treeNode->getTypeName());
 $properties =& $handler->getProperties($treePath);
 
 if (empty($_POST)) {
-    $template =& new PageTemplate('minimal', 'admin_form', array(
+    $template =& new PageTemplate('admin', 'node_edit', array(
         'action' => SITE_URL . '/node_edit.php/' . $treePath->toString(),
         'properties' => $properties
     ));
     $template->set('title', 'Edit');
     $template->fillAndPrint();
 } else {
-    for ($i = 0; $i < count($properties); ++$i) {
-        $property =& $properties[$i];
+    foreach ($properties as &$property) {
         $result = $property->parseValue($_POST[$property->getName()]);
         //assert('$result === true');
-        $treeNode->setProperty($property->getName(), $property->getValue());
+        switch ($property->getName()) {
+        case 'name':
+            $treeNode->setName($property->getValue());
+            break;
+        case 'title':
+            $treeNode->setTitle($property->getValue());
+            break;
+        case 'typeName':
+            $treeNode->setTypeName($property->getValue());
+            break;
+        case 'hasOwnDir':
+            $treeNode->setHasOwnDir($property->getValue());
+            break;
+        default:
+            $treeNode->setProperty($property->getName(), $property->getValue());
+        }
     }
-    Tree::persistNode($treeNode);
+    assert('Tree::persistNode($treeNode) === true');
     HTTP::seeOther(SITE_URL . '/index.php/' . $treePath->toString());
 }
 

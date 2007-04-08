@@ -79,9 +79,9 @@ class Tree {
             $parentId = $node->getParentId();
         }
         $db =& Storage::getConnection();
-        $query = 'SELECT COUNT(*) FROM `!` WHERE `parentId` = ? AND `name` = ?';
+        $query = 'SELECT COUNT(*) FROM `!` WHERE `parentId` = ? AND `name` = ? AND `id` \!= ?';
         $count =& $db->getOne($query, array(
-                TreeNode::getTableName(), $parentId, $node->getName()));
+                TreeNode::getTableName(), $parentId, $node->getName(), $node->getId()));
         assert('!DB::isError($count)');
         if ($count != 0) {
             // log('Duplicate name: ' . $node->getName() . "\n");

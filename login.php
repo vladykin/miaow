@@ -25,7 +25,7 @@ if ($user->isAdmin()) {
         HTTP::seeOther(SITE_URL . '/admin.php');
     }
 } else {
-    $template = new LayoutTemplate('minimal');
+    $template = new LayoutTemplate('admin');
     $template->set('title', 'Login form');
     $template->set('content', new ContentTemplate('login_form', array(
         'action' => htmlspecialchars(SITE_URL . '/login.php?' . $_SERVER['QUERY_STRING'])
