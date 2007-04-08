@@ -46,7 +46,7 @@ if (empty($_POST)) {
 
 function showPage1($message = null) {
     global $treePath;
-    $template = new PageTemplate('minimal', 'node_create_page_1', array(
+    $template = new PageTemplate('admin', 'node_create_page_1', array(
         'action' => SITE_URL . '/node_create.php/' . $treePath->toString(),
         'properties' => array(
             new TextProperty('Name', 'name', ''),
@@ -61,7 +61,7 @@ function showPage2($message = null) {
     global $treePath;
     $knownTypes = HandlerFactory::getKnownTypes();
     $handler = HandlerFactory::getHandler($knownTypes[(int)$_POST['typeName']]);
-    $template = new PageTemplate('minimal', 'node_create_page_2', array(
+    $template = new PageTemplate('admin', 'node_create_page_2', array(
         'action' => SITE_URL . '/node_create.php/' . $treePath->toString(),
         'properties' => $handler->getProperties($treePath)
     ));
@@ -79,7 +79,7 @@ $properties = array(
 );
 
 if (empty($_POST)) {
-    $template = new PageTemplate('minimal', 'admin_form', array(
+    $template = new PageTemplate('admin', 'admin_form', array(
         'action' => SITE_URL . '/node_create.php/' . $treePath->toString(),
         'properties' => $properties 
     ));
