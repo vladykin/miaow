@@ -170,6 +170,27 @@ class tests_TreeTest extends PHPUnit_TestCase {
         $this->cleanup();
     }
 
+    function testPersistModified() {
+        // create root node
+        $path =& new TreePath();
+        $node =& new TreeNode();
+        $node->setName('root');
+        $node->setTitle('Root Node');
+        $node->setTypeName('RootType');
+        $node->setHasOwnDir(true);
+        $node->setIsVisible(true);
+        $result = Tree::persistNode($node, $path);
+        $this->assertTrue($result);
+        // modify some fields
+        $node->setTitle('Another Title');
+        $node->setIsVisible(false);
+        // persisting must pass
+        $result = Tree::persistNode($node);
+        $this->assertTrue($result);
+        // cleanup
+        $this->cleanup();
+    }
+
 }
 
 ?>
