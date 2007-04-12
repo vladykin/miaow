@@ -1,0 +1,21 @@
+<form name="edit" id="edit" action="<?= $action ?>" method="post">
+<fieldset>
+<legend>Node Properties</legend>
+<table>
+<?php
+    foreach ($properties as $property) {
+?>
+<tr>
+<td><label for="<?= $property->getName() ?>"><?= $property->getTitle() ?></label></td>
+<td>
+<?= $property->getControl() ?>
+</td>
+</tr>
+<?php
+    }
+?>
+</table>
+</fieldset>
+<button type="submit">Submit</button>
+<button type="reset">Reset</button>
+</form>
