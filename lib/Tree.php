@@ -33,11 +33,11 @@ class Tree {
      */
     function &resolvePath($path) {
         assert('is_string($path)');
-        $db =& Storage::getConnection();
+        $db = Storage::getConnection();
         $query = 'SELECT * FROM `!` WHERE `parentId` = ?';
-        $res =& $db->getRow($query, array(TreeNode::getTableName(), 0));
+        $res = $db->getRow($query, array(TreeNode::getTableName(), 0));
         assert('is_array($res) && !DB::isError($res)');
-        $node =& EntityManager::decode($res, 'TreeNode');
+        $node = EntityManager::decode($res, 'TreeNode');
         $nodes = array($node);
         $path = explode('/', $path);
         if (!empty($path) && strlen($path[0]) == 0) { array_shift($path); }
@@ -47,13 +47,13 @@ class Tree {
                 continue;
             }
             $query = 'SELECT * FROM `!` WHERE `parentId` = ? AND `name` = ?';
-            $res =& $db->getRow($query, 
+            $res = $db->getRow($query, 
                 array(TreeNode::getTableName(), $node->getId(), $name));
             if (is_null($res) || DB::isError($res)) {
                 return null;
             }
-            $node =& EntityManager::decode($res, 'TreeNode');
-            $nodes[] =& $node;
+            $node = EntityManager::decode($res, 'TreeNode');
+            $nodes[] = $node;
         }
         return new TreePath($nodes);
     }

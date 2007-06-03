@@ -82,11 +82,10 @@ class TreePath {
     function toString() {
         assert('!empty($this->nodes)');
         $path = array();
-        for ($i = 0; $i < $this->getNodeCount(); ++$i) {
-            $node =& $this->getNode($i);
+        for ($i = 1; $i < $this->getNodeCount(); ++$i) {
+            $node = $this->getNode($i);
             $path[] = $node->getName();
         }
-        array_shift($path);
         $path = implode('/', $path);
         return (strlen($path) > 0)? $path : '.';
     }
