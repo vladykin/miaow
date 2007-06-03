@@ -26,6 +26,10 @@ define('DB_CHARSET', '@DB_CHARSET@');
 // E.g. mysql://user:pass@host/dbname (see PEAR::DB docs for details)
 define('DB_CONNECT_STRING', '@DB_CONNECT_STRING@');
 
+// Site skin - page layout, colors, buttons and so on.
+// Must point to a directory where the skin is installed.
+define('SKIN', 'skins/default');
+
 ////////////////////////////////////////////////////////////////////////////
 // More settings. You don't need to edit or even understand this.
 
