@@ -82,7 +82,7 @@ class Template {
 class LayoutTemplate extends Template {
 
     function LayoutTemplate($layoutName, $vars = array()) {
-        parent::Template(SITE_DIR . '/style/layout/' . $layoutName . '.phtml', $vars);
+        parent::Template(SITE_DIR . '/' . SKIN . '/layout/' . $layoutName . '.phtml', $vars);
     }
 
 }
@@ -91,7 +91,7 @@ class LayoutTemplate extends Template {
 class ContentTemplate extends Template {
 
     function ContentTemplate($contentName, $vars = array()) {
-        parent::Template(SITE_DIR . '/style/pages/' . $contentName . '.phtml', $vars);
+        parent::Template(SITE_DIR . '/' . SKIN . '/pages/' . $contentName . '.phtml', $vars);
     }
 
 }
@@ -110,7 +110,7 @@ class PageTemplate extends LayoutTemplate {
 class TreeNodeTemplate extends Template {
 
     function TreeNodeTemplate($file, $vars = array()) {
-        parent::Template(SITE_DIR . '/style/nodes/' . $file . '.phtml', $vars);
+        parent::Template(SITE_DIR . '/' . SKIN . '/nodes/' . $file . '.phtml', $vars);
     }
 
     function printAuthors($authors) {
