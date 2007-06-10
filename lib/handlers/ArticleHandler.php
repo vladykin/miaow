@@ -8,15 +8,15 @@ require_once('lib/XhtmlParser.php');
 require_once('lib/Properties.php');
 require_once('lib/Templates.php');
 
-class ArticleHandler extends Handler {
+class ArticleHandler implements Handler {
 
     /**
      * @access public
      * @param TreePath $treePath
+     * @param array $options
      * @return boolean
      */
-    function handle(&$treePath) {
-        assert('is_a($treePath, \'TreePath\')');
+    public function handle(TreePath $treePath, $options) {
         $treeNode =& $treePath->getNode();
         $dir = $treePath->getDirectory();
         $parser =& new XhtmlParser();
@@ -52,10 +52,10 @@ class ArticleHandler extends Handler {
     /**
      * @access public abstract
      * @param TreePath $treePath
+     * @param array $options
      * @return string
      */
-    function getPreview(&$treePath) {
-        assert('is_a($treePath, \'TreePath\')');
+    public function getPreview(TreePath $treePath, $options) {
         $treeNode =& $treePath->getNode();
         $t =& new TreeNodeTemplate('TextPreview');
         $t->set('title', $treeNode->getTitle());
@@ -71,8 +71,7 @@ class ArticleHandler extends Handler {
      * @param TreePath $treePath
      * @return array
      */
-    function getProperties(&$treePath) {
-        assert('is_a($treePath, \'TreePath\')');
+    public function getProperties(TreePath $treePath) {
         $treeNode =& $treePath->getNode();
         return array(
             new TextProperty('Title', 'title', $treeNode->getTitle()),
