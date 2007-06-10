@@ -7,31 +7,23 @@ require_once('lib/Util.php');
 /**
  * Templates are used to separate application logic from presentation.
  */
-class Template {
-
-    /**
-     * @var string
-     */
-    private $file;
+abstract class Template {
 
     /**
      * @var array
      */
-    private $vars;
+    protected $vars;
 
     /**
-     * @param string $file
-     * @param array $vars
+     * Constructs new template.
      */
-    public function __construct($file, $vars = array()) {
-        assert('is_string($file) && is_file($file)');
-        assert('is_null($vars) || is_array($vars)');
-        $this->file = $file;
+    public function __construct($vars = array()) {
+        assert('is_array($vars)');
         $this->vars = $vars;
     }
 
     /**
-     *
+     * Resets all variables to null at once.
      */
     public function resetVars() {
         $this->vars = array();
@@ -42,97 +34,76 @@ class Template {
      * @param mixed $value
      */
     public function set($name, $value) {
-        assert('is_array($this->vars)');
         assert('is_string($name) && strlen($name) > 0');
         $this->vars[$name] = $value;
-    }
-
-    /**
-     *
-     */
-    public function fillAndPrint() {
-        foreach ($this->vars as $name => $value) {
-            eval("\$$name = \$value;");
-        }
-        include($this->file);
     }
 
     /**
      * @return string
      */
     public function fillAndReturn() {
-        foreach ($this->vars as $name => $value) {
-            eval("\$$name = \$value;");
-        }
         ob_start();
-        include($this->file);
+        $this->fillAndPrint();
         $result = ob_get_contents();
         ob_end_clean();
         return $result;
     }
+    
+    /**
+     *
+     */
+    public abstract function fillAndPrint();
 
 }
 
+class SkinTemplate extends Template {
 
-class LayoutTemplate extends Template {
+    private $url;
 
-    function LayoutTemplate($layoutName, $vars = array()) {
-        parent::__construct(SITE_DIR . '/' . SKIN . '/layout/' . $layoutName . '.phtml', $vars);
+    public function __construct($url, $vars = array()) {
+        assert('is_string($url)');
+        parent::__construct($vars);
+        $this->url = $url;
+    }
+
+    public function fillAndPrint() {
+        foreach ($this->vars as $name => $value) {
+            eval("\$$name = \$value;");
+        }
+        include(SITE_DIR . '/' . SKIN . '/' . $this->url . '.phtml');
     }
 
 }
 
+class LayoutTemplate extends SkinTemplate {
 
-class ContentTemplate extends Template {
-
-    function ContentTemplate($contentName, $vars = array()) {
-        parent::__construct(SITE_DIR . '/' . SKIN . '/pages/' . $contentName . '.phtml', $vars);
+    public function __construct($name, $vars = array()) {
+        parent::__construct('layout/' . $name, $vars);
     }
 
 }
 
+class ContentTemplate extends SkinTemplate {
+
+    public function __construct($name, $vars = array()) {
+        parent::__construct('pages/' . $name, $vars);
+    }
+
+}
 
 class PageTemplate extends LayoutTemplate {
     
-    function PageTemplate($layoutName, $contentName, $vars = array()) {
+    function __construct($layoutName, $contentName, $vars = array()) {
         parent::__construct($layoutName, $vars);
         $this->set('content', new ContentTemplate($contentName, $vars));
     }
 
 }
 
+class TreeNodeTemplate extends SkinTemplate {
 
-class TreeNodeTemplate extends Template {
-
-    function TreeNodeTemplate($file, $vars = array()) {
-        parent::__construct(SITE_DIR . '/' . SKIN . '/nodes/' . $file . '.phtml', $vars);
-    }
-
-    function printAuthors($authors) {
-        assert('Util::isArrayOf($authors, \'User\')');
-//        echo(count($authors) == 1? 'Автор: ' : 'Авторы: ');
-        $first = true;
-        foreach ($authors as $author) {
-            if ($first) {
-                $first = false;
-            } else {
-                echo(', ');
-            }
-            echo($author->getName());
-        }
-    }
-
-    function printKeywords($keywords) {
-        assert('Util::isArrayOf($keywords, \'Keyword\')');
-        $first = true;
-        foreach ($keywords as $keyword) {
-            if ($first) {
-                $first = false;
-            } else {
-                echo(', ');
-            }
-            echo($keyword->getTitle());
-        }
+    function __construct($name, $vars = array()) {
+        parent::__construct('nodes/' . $name, $vars);
     }
 
 }

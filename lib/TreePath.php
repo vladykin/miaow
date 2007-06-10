@@ -55,7 +55,7 @@ class TreePath {
      */
     function popNode() {
         assert('!empty($this->nodes)');
-        array_pop($this->nodes);
+        return array_pop($this->nodes);
     }
 
 
