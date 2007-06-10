@@ -2,7 +2,7 @@
 
 // $Id$
 
-require_once(dirname(__FILE__) . '/Util.php');
+require_once('lib/Util.php');
 
 /**
  * Templates are used to separate application logic from presentation.
@@ -10,23 +10,20 @@ require_once(dirname(__FILE__) . '/Util.php');
 class Template {
 
     /**
-     * @access private
      * @var string
      */
-    var $file;
+    private $file;
 
     /**
-     * @access private
      * @var array
      */
-    var $vars;
+    private $vars;
 
     /**
-     * @access public
      * @param string $file
      * @param array $vars
      */
-    function Template($file, $vars = array()) {
+    public function __construct($file, $vars = array()) {
         assert('is_string($file) && is_file($file)');
         assert('is_null($vars) || is_array($vars)');
         $this->file = $file;
@@ -34,27 +31,26 @@ class Template {
     }
 
     /**
-     * @access public
+     *
      */
-    function resetVars() {
+    public function resetVars() {
         $this->vars = array();
     }
 
     /**
-     * @access public
      * @param string $name
      * @param mixed $value
      */
-    function set($name, $value) {
+    public function set($name, $value) {
         assert('is_array($this->vars)');
         assert('is_string($name) && strlen($name) > 0');
-        $this->vars[$name] =& $value;
+        $this->vars[$name] = $value;
     }
 
     /**
-     * @access public
+     *
      */
-    function fillAndPrint() {
+    public function fillAndPrint() {
         foreach ($this->vars as $name => $value) {
             eval("\$$name = \$value;");
         }
@@ -62,10 +58,9 @@ class Template {
     }
 
     /**
-     * @access public
      * @return string
      */
-    function fillAndReturn() {
+    public function fillAndReturn() {
         foreach ($this->vars as $name => $value) {
             eval("\$$name = \$value;");
         }
@@ -82,7 +77,7 @@ class Template {
 class LayoutTemplate extends Template {
 
     function LayoutTemplate($layoutName, $vars = array()) {
-        parent::Template(SITE_DIR . '/' . SKIN . '/layout/' . $layoutName . '.phtml', $vars);
+        parent::__construct(SITE_DIR . '/' . SKIN . '/layout/' . $layoutName . '.phtml', $vars);
     }
 
 }
@@ -91,7 +86,7 @@ class LayoutTemplate extends Template {
 class ContentTemplate extends Template {
 
     function ContentTemplate($contentName, $vars = array()) {
-        parent::Template(SITE_DIR . '/' . SKIN . '/pages/' . $contentName . '.phtml', $vars);
+        parent::__construct(SITE_DIR . '/' . SKIN . '/pages/' . $contentName . '.phtml', $vars);
     }
 
 }
@@ -100,7 +95,7 @@ class ContentTemplate extends Template {
 class PageTemplate extends LayoutTemplate {
     
     function PageTemplate($layoutName, $contentName, $vars = array()) {
-        parent::LayoutTemplate($layoutName);
+        parent::__construct($layoutName, $vars);
         $this->set('content', new ContentTemplate($contentName, $vars));
     }
 
@@ -110,7 +105,7 @@ class PageTemplate extends LayoutTemplate {
 class TreeNodeTemplate extends Template {
 
     function TreeNodeTemplate($file, $vars = array()) {
-        parent::Template(SITE_DIR . '/' . SKIN . '/nodes/' . $file . '.phtml', $vars);
+        parent::__construct(SITE_DIR . '/' . SKIN . '/nodes/' . $file . '.phtml', $vars);
     }
 
     function printAuthors($authors) {

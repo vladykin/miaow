@@ -4,38 +4,28 @@
 
 /**
  * Encapsulates all TreeNode-type-dependent behaviour.
- * This is abstract base class.
  */
-class Handler {
+interface Handler {
 
     /**
-     * @access public abstract
      * @param TreePath $treePath
-     * @param User $user
+     * @param array $options
      * @return boolean
      */
-    function handle(&$treePath, &$user) {
-        assert('false');
-    }
+    public function handle(TreePath $treePath, $options);
 
     /**
-     * @access public abstract
      * @param TreePath $treePath
-     * @param User $user
+     * @param array $options
      * @return string
      */
-    function getPreview(&$treePath, &$user) {
-        assert('false');
-    }
+    public function getPreview(TreePath $treePath, $options);
 
     /**
-     * @access public abstract
      * @param TreePath $treePath
      * @return array
      */
-    function getProperties(&$treePath) {
-        assert('false');
-    }
+    public function getProperties(TreePath $treePath);
 
 }
 
