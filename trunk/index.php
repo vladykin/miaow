@@ -28,7 +28,7 @@ if (!$node->getIsVisible() && !$user->isAdmin()) {
 }
 
 $handler =& HandlerFactory::getHandler($node->getTypeName());
-if (!$handler->handle($treePath, $user)) {
+if (!$handler->handle($treePath, array())) {
     HTTP::internalServerError();
     exit(1);
 }
