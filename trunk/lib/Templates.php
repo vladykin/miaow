@@ -73,40 +73,4 @@ class SkinTemplate extends Template {
 
 }
 
-// The classes below are deprecated.
-// They will live here for a while for backward compatibility.
-
-class LayoutTemplate extends SkinTemplate {
-
-    public function __construct($name, $vars = array()) {
-        parent::__construct('layout/' . $name, $vars);
-    }
-
-}
-
-class ContentTemplate extends SkinTemplate {
-
-    public function __construct($name, $vars = array()) {
-        parent::__construct('pages/' . $name, $vars);
-    }
-
-}
-
-class PageTemplate extends LayoutTemplate {
-    
-    function __construct($layoutName, $contentName, $vars = array()) {
-        parent::__construct($layoutName, $vars);
-        $this->set('content', new ContentTemplate($contentName, $vars));
-    }
-
-}
-
-class TreeNodeTemplate extends SkinTemplate {
-
-    function __construct($name, $vars = array()) {
-        parent::__construct('nodes/' . $name, $vars);
-    }
-
-}
-
 ?>

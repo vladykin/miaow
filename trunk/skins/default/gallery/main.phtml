@@ -1,0 +1,25 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title><?= $treeNode->getTitle() ?> &mdash; My Site</title>
+</head>
+<body>
+
+<h1><?= $treeNode->getTitle() ?></h1>
+
+<img src="<?= SITE_URL ?>/<?= $treePath->getDirectory() ?>/<?= $currentImage->getProperty('src') ?>" alt="<?= $currentImage->getTitle() ?>" />
+
+<ul style="list-style: none; margin: 0px; padding: 0px;">
+<? foreach ($imageNodes as $imageNode): ?>
+<li style="float: left;">
+    <a href="<?= $treePath->toURL() . '/' . $imageNode->getName() ?>">
+    <img src="<?= SITE_URL ?>/<?= $treePath->getDirectory() ?>/<?= $imageNode->getProperty('thumbnail') ?>" alt="<?= $imageNode->getTitle() ?>" />
+    </a>
+</li>
+<? endforeach ?>
+</ul>
+
+</body>
+</html>

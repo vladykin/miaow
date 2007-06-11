@@ -28,7 +28,7 @@ class ListHandler implements Handler {
         $res = $db->getAll($query, array(
             TreeNode::getTableName(), 
             $treeNode->getId(), 
-            1, //$user->isAdmin(),
+            Session::isPrivileged(),
             $treeNode->getProperty('order')
         ));
         assert('!DB::isError($res)');
@@ -41,18 +41,12 @@ class ListHandler implements Handler {
             $treePath->popNode();
         }
 
-        $template = new LayoutTemplate('default');
+        $template = new SkinTemplate('list/main');
         $template->set('treeNode', $treeNode);
         $template->set('treePath', $treePath);
-        $template->set('content', new SkinTemplate('list/main',
-            array(
-                'treePath' => $treePath,
-                'treeNode' => $treeNode,
-                'childCount' => $childNodeCount, 
-                'childIndex' => $childNodeIndex,
-                'childPreviews' => $childPreviews
-            )
-        ));
+        $template->set('childCount', $childNodeCount);
+        $template->set('childIndex', $childNodeIndex);
+        $template->set('childPreviews', $childPreviews);
         $template->fillAndPrint();
         return true;
     }
