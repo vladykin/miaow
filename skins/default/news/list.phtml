@@ -9,19 +9,13 @@
 
 <h1><?= $treeNode->getTitle() ?></h1>
 
-<?= $content ?>
-
 <?
-    if (isset($children) && count($children) > 0) {
-        echo("<ul>\n");
-        foreach ($children as $child) {
-            echo("<li>" . $child . "</li>\n");
-        }
-        echo("</ul>\n");
-    }
-?>
 
-<? if (count($authors) > 0) { ?><p class="singature"><? $this->printAuthors($authors) ?></p><? } ?>
+foreach ($allNews as $news) {
+    echo($news);
+}
+
+?>
 
 </body>
 </html>
