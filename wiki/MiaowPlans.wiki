@@ -2,11 +2,7 @@
 
 = Current activities =
 
-*Goal*: implement all CAT functionality by the end of March.
-  * Administrative interface - page creation, editing, moving, deleting.
-  * Voting
-  * Feedback page
-  * Lecture claims page
+Current driver for Miaow development is numkod.com - the first site that decided to use Miaow.
 
 = Future plans =
   * Migrate from PEAR::DB to PDO
