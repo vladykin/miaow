@@ -16,32 +16,31 @@ class ArticleHandler implements Handler {
      * @param array $options
      * @return boolean
      */
-    public function handle(TreePath $treePath, $options) {
-        $treeNode =& $treePath->getNode();
+    public function handle(TreePath $treePath, $options = array()) {
+        $treeNode = $treePath->getNode();
         $dir = $treePath->getDirectory();
-        $parser =& new XhtmlParser();
+        $parser = new XhtmlParser();
         $transformer = new LinkTransformer(SITE_URL . '/index.php', SITE_URL . '/' . $dir);
         $parser->parseFile($dir . '/' . $treeNode->getProperty('file'), $transformer);
-        $content =& new TreeNodeTemplate('Article');
+        $content = new SkinTemplate('article/main');
         $content->set('content', $parser->getContent());
         $content->set('authors', $treeNode->getAuthors());
-        if ($treeNode->getProperty('listChildren')/* || $user->isAdmin()*/) {
-            $db =& Storage::getConnection();
+        if ($treeNode->getProperty('listChildren') || Session::isPrivileged()) {
+            $db = Storage::getConnection();
             $query = 'SELECT * FROM ! WHERE parentId = ? AND (isVisible || ?)';
-            $res =& $db->getAll($query, array(DB_TABLE_PAGES, $treeNode->getId(), $user->isAdmin()));
+            $res = $db->getAll($query, array(TreeNode::getTableName(), $treeNode->getId(), Session::isPrivileged()));
             assert('!DB::isError($res)');
             $children = array();
             foreach ($res as $row) {
-                $childNode =& TreeNode::fromQueryResult($row);
-                $handler =& HandlerFactory::getHandler($childNode->getTypeName());
+                $childNode = EntityManager::decode($row, 'TreeNode');
+                $handler = HandlerFactory::getHandler($childNode->getTypeName());
                 $treePath->pushNode($childNode);
                 $children[] = $handler->getPreview($treePath);
                 $treePath->popNode();
             }
             $content->set('children', $children);
         }
-        $template =& new LayoutTemplate('default');
-        $template->set('user', $user);
+        $template = new LayoutTemplate('default');
         $template->set('treePath', $treePath);
         $template->set('treeNode', $treeNode);
         $template->set('content', $content);
@@ -55,15 +54,9 @@ class ArticleHandler implements Handler {
      * @param array $options
      * @return string
      */
-    public function getPreview(TreePath $treePath, $options) {
-        $treeNode =& $treePath->getNode();
-        $t =& new TreeNodeTemplate('TextPreview');
-        $t->set('title', $treeNode->getTitle());
-        $t->set('authors', $treeNode->getAuthors());
-        $t->set('whenCreated', substr($treeNode->getWhenCreated(), 0, 4));
-        $t->set('whenPublished', $treeNode->getWhenPublished());
-        $t->set('url', $treePath->toURL());
-        return $t->fillAndReturn();
+    public function getPreview(TreePath $treePath, $options = array()) {
+        $treeNode = $treePath->getNode();
+        return '<a href="' . $treePath->toURL() . '">' . $treeNode->getTitle() . '</a>';
     }
 
     /**
@@ -72,7 +65,7 @@ class ArticleHandler implements Handler {
      * @return array
      */
     public function getProperties(TreePath $treePath) {
-        $treeNode =& $treePath->getNode();
+        $treeNode = $treePath->getNode();
         return array(
             new TextProperty('Title', 'title', $treeNode->getTitle()),
             new FileProperty('File', 'file',

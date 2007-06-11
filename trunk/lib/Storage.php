@@ -20,7 +20,7 @@ class Storage {
     function &getConnection() {
         static $connection = null;
         if (is_null($connection)) {
-            $connection =& DB::connect(DB_CONNECT_STRING);
+            $connection = DB::connect(DB_CONNECT_STRING);
             assert('!DB::isError($connection)');
         }
         return $connection;

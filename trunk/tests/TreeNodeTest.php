@@ -21,7 +21,7 @@ class tests_TreeNodeTest extends PHPUnit_TestCase {
 
     function testPersistFindRemove() {
         // create and persist a tree node
-        $entity =& new TreeNode();
+        $entity = new TreeNode();
         $this->assertEquals(0, $entity->getId());
         $entity->setParentId(0);
         $entity->setName('root');
@@ -38,7 +38,7 @@ class tests_TreeNodeTest extends PHPUnit_TestCase {
         $id = $entity->getId();
         $this->assertTrue($entity->getId() > 0);
         // now try to get it back
-        $entity =& EntityManager::find('TreeNode', $id);
+        $entity = EntityManager::find('TreeNode', $id);
         $this->assertNotNull($entity);
         $this->assertEquals($id, $entity->getId());
         $this->assertEquals(0, $entity->getParentId());
@@ -55,13 +55,13 @@ class tests_TreeNodeTest extends PHPUnit_TestCase {
         // remove tree node from storage
         EntityManager::remove($entity);
         // check that it has been removed
-        $entity =& EntityManager::find('TreeNode', $id);
+        $entity = EntityManager::find('TreeNode', $id);
         $this->assertNull($entity);
     }
 
     function testUpdate() {
         // create and persist a tree node
-        $entity =& new TreeNode();
+        $entity = new TreeNode();
         $entity->setParentId(0);
         $entity->setName('root');
         $entity->setTitle('Root Node');
@@ -89,7 +89,7 @@ class tests_TreeNodeTest extends PHPUnit_TestCase {
         $entity->setProperty('aaa', 'ccc');
         EntityManager::persist($entity);
         // get it back and verify updates
-        $entity =& EntityManager::find('TreeNode', $id);
+        $entity = EntityManager::find('TreeNode', $id);
         $this->assertEquals($id, $entity->getId());
         $this->assertEquals(1, $entity->getParentId());
         $this->assertEquals('news', $entity->getName());
@@ -106,7 +106,7 @@ class tests_TreeNodeTest extends PHPUnit_TestCase {
 
     function testNativeQuery() {
         // create and persist a tree node
-        $entity =& new TreeNode();
+        $entity = new TreeNode();
         $entity->setParentId(1);
         $entity->setName('native-query-1');
         $entity->setTitle('Native Query 1');
@@ -119,7 +119,7 @@ class tests_TreeNodeTest extends PHPUnit_TestCase {
         $entity->setPriority(1);
         EntityManager::persist($entity);
         // create and persist another tree node
-        $entity =& new TreeNode();
+        $entity = new TreeNode();
         $entity->setParentId(2);
         $entity->setName('native-query-2');
         $entity->setTitle('Native Query 2');
@@ -133,12 +133,12 @@ class tests_TreeNodeTest extends PHPUnit_TestCase {
         EntityManager::persist($entity);
         $id = $entity->getId();
         // now issue a native query to storage
-        $db =& Storage::getConnection();
+        $db = Storage::getConnection();
         $query = 'SELECT * FROM `!` WHERE `name` = ? AND \!`isVisible`';
-        $row =& $db->getRow($query, array(
+        $row = $db->getRow($query, array(
             TreeNode::getTableName(), 'native-query-2'));
         $this->assertType('array', $row);
-        $entity =& EntityManager::decode($row, 'TreeNode');
+        $entity = EntityManager::decode($row, 'TreeNode');
         // check that we've got expected result
         $this->assertEquals($id, $entity->getId());
         $this->assertEquals(2, $entity->getParentId());

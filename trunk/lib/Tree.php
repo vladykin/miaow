@@ -10,17 +10,17 @@ class Tree {
 
     function &findPath(&$node) {
         assert('is_a($node, \'TreeNode\')');
-        $db =& Storage::getConnection();
+        $db = Storage::getConnection();
         $nodes = array();
-        $nodes[] =& $node;
+        $nodes[] = $node;
         while ($node->getParentId() > 0) {
             $query = 'SELECT * FROM ! WHERE id = ?';
-            $res =& $db->getRow($query, array(TreeNode::getTableName(), $node->getParentId()));
+            $res = $db->getRow($query, array(TreeNode::getTableName(), $node->getParentId()));
             assert('!DB::isError($res) && is_array($res)');
-            $node =& EntityManager::decode($res, 'TreeNode');
-            $nodes[] =& $node;
+            $node = EntityManager::decode($res, 'TreeNode');
+            $nodes[] = $node;
         }
-        $path =& new TreePath();
+        $path = new TreePath();
         for ($i = count($nodes) - 1; $i >= 0; --$i) {
             $path->pushNode($nodes[$i]);
         }
@@ -31,7 +31,7 @@ class Tree {
      * @access public static
      * @return TreePath
      */
-    function &resolvePath($path) {
+    function resolvePath($path) {
         assert('is_string($path)');
         $db = Storage::getConnection();
         $query = 'SELECT * FROM `!` WHERE `parentId` = ?';
@@ -70,7 +70,7 @@ class Tree {
                         return false;
                     }
                 }
-                $parentNode =& $path->getNode();
+                $parentNode = $path->getNode();
                 $parentId = $parentNode->getId();
             } else {
                 $parentId = 0;
@@ -78,9 +78,9 @@ class Tree {
         } else {
             $parentId = $node->getParentId();
         }
-        $db =& Storage::getConnection();
+        $db = Storage::getConnection();
         $query = 'SELECT COUNT(*) FROM `!` WHERE `parentId` = ? AND `name` = ? AND `id` \!= ?';
-        $count =& $db->getOne($query, array(
+        $count = $db->getOne($query, array(
                 TreeNode::getTableName(), $parentId, $node->getName(), $node->getId()));
         assert('!DB::isError($count)');
         if ($count != 0) {
@@ -96,17 +96,17 @@ class Tree {
         assert('is_a($node, \'TreeNode\')');
         assert('is_bool($recursive)');
         assert('$node->getId() > 0');
-        $db =& Storage::getConnection();
+        $db = Storage::getConnection();
         $query = 'SELECT COUNT(*) FROM `!` WHERE `parentId` = ?';
-        $childCount =& $db->getOne($query, array(
+        $childCount = $db->getOne($query, array(
                 TreeNode::getTableName(), $node->getId()));
-        assert('!DB::isError($count)');
+        assert('!DB::isError($childCount)');
         if ($recursive && $childCount > 0) {
             $query = 'SELECT * FROM `!` WHERE `parentId` = ?';
-            $res =& $db->getAll($query, array(
+            $res = $db->getAll($query, array(
                     TreeNode::getTableName(), $node->getId()));
             foreach ($res as $row) { 
-                $childNode =& EntityManager::decode($row, 'TreeNode');
+                $childNode = EntityManager::decode($row, 'TreeNode');
                 Tree::removeNode($childNode, true);
             }
         }

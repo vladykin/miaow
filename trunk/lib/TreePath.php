@@ -24,7 +24,7 @@ class TreePath {
      * @access public
      * @return TreeNode
      */
-    function &getNode($index = null) {
+    function getNode($index = null) {
         assert('isset($this->nodes)');
         assert('is_null($index) || is_int($index) && 0 <= $index && $index < count($this->nodes)');
         return isset($index)? 
@@ -44,10 +44,10 @@ class TreePath {
     function pushNode(&$node) {
         assert('is_a($node, \'TreeNode\')');
         if (!empty($this->nodes)) {
-            $prevnode =& end($this->nodes);
+            $prevnode = end($this->nodes);
             assert('$prevnode->getId() == $node->getParentId()');
         }
-        $this->nodes[] =& $node;
+        $this->nodes[] = $node;
     }
     
     /**
@@ -67,7 +67,7 @@ class TreePath {
         assert('is_array($this->nodes) && !empty($this->nodes)');
         $dirs = array();
         for ($i = 0; $i < $this->getNodeCount(); ++$i) {
-            $node =& $this->getNode($i);
+            $node = $this->getNode($i);
             if ($node->getHasOwnDir()) {
                 $dirs[] = $node->getName();
             }
