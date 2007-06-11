@@ -1,0 +1,32 @@
+<ul>
+<?
+
+foreach($childPreviews as $preview) { 
+    echo('<li>' . $preview . '</li>');
+}
+
+?>
+</ul>
+
+<?
+if ($childIndex > 0) {
+
+?>
+
+<a href="?f=<?php echo(max(0, $childIndex - 10)); ?>">Prev page</a>
+
+<?php
+
+}
+
+if ($childIndex + 10 < $childCount) {
+
+?>
+
+<a href="?f=<?php echo($childIndex + 10); ?>">Next page</a>
+
+<?php
+
+}
+
+?>

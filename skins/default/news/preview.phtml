@@ -1,0 +1,7 @@
+<!-- $Id: NewsPreview.phtml,v 1.3 2006/11/17 23:31:11 vladykin Exp $ -->
+<?php
+    $treeNode =& $treePath->getNode();
+?>
+<div class="block-head"><a href="<?= $treePath->toURL() ?>"><?= $treeNode->getTitle() ?></a> /
+<?= $treeNode->getDatePublished() ?></div>
+<?= $content ?>

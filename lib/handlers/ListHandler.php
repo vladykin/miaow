@@ -67,7 +67,7 @@ class ListHandler implements Handler {
         return array(
             new TextProperty('Title', 'title', $treeNode->getTitle()),
             new OrderProperty('Order by', 'order', $treeNode->getProperty('order')),
-            new VisibilityProperty($treeNode->isVisible()),
+            new VisibilityProperty($treeNode->getIsVisible()),
             new UserListProperty('Authors', 'authors', array()),
             new KeywordListProperty('Keywords', 'keywords', array()),
         );

@@ -60,9 +60,6 @@ class GalleryHandler implements Handler {
         $treeNode = $treePath->getNode();
         return array(
             new TextProperty('Title', 'title', $treeNode->getTitle()),
-            new FileProperty('File', 'file',
-                    $treeNode->getProperty('file'),
-                    $treePath->getDirectory()),
             new VisibilityProperty($treeNode->getIsVisible()),
             new UserListProperty('Authors', 'authors', array()),
             new KeywordListProperty('Keywords', 'keywords', array()),

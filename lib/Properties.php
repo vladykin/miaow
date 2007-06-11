@@ -121,7 +121,7 @@ class OrderProperty extends SelectProperty {
         assert('is_null($value) || is_string($value)');
         parent::__construct($title, $name, $value, array(
             'title ASC' => 'By title, ascending',
-            'whenPublished DESC' => 'By publishing date, descending'
+            'datePublished DESC' => 'By publishing date, descending'
         ));
     }
 
@@ -186,9 +186,7 @@ class SelectProperty extends Property {
 class TextareaProperty extends Property {
 
     public function __construct($title, $name, $value) {
-        $this->setTitle($title);
-        $this->setName($name);
-        $this->setValue($value);
+        parent::__construct($title, $name, $value);
     }
 
     public function getControl() {
