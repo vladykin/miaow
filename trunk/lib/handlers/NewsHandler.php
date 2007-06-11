@@ -31,15 +31,10 @@ class NewsHandler implements Handler {
             $parser = new TextParser();
             $content = $parser->parse($treeNode->getProperty('preview'), $transformer);
         }
-        $t = new SkinTemplate('news/main');
-        $t->set('title', $treeNode->getTitle());
-        $t->set('whenPublished', $treeNode->getDatePublished());
-        $t->set('content', $content);
-        $t->set('authors', $treeNode->getAuthors());
-        $template = new LayoutTemplate('default');
+        $template = new SkinTemplate('news/main');
         $template->set('treePath', $treePath);
         $template->set('treeNode', $treeNode);
-        $template->set('content', $t);
+        $template->set('content', $content);
         $template->fillAndPrint();
         return true;
     }
@@ -72,7 +67,7 @@ class NewsHandler implements Handler {
             new FileProperty('File', 'file',
                 $treeNode->getProperty('file'),
                 $treePath->getDirectory()),
-            new VisibilityProperty($treeNode->isVisible()),
+            new VisibilityProperty($treeNode->getIsVisible()),
             new UserListProperty('Authors', 'authors', array()),
             new KeywordListProperty('Keywords', 'keywords', array()),
         );

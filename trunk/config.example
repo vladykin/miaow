@@ -10,10 +10,6 @@
 // You can choose any locale with UTF-8 encoding.
 setlocale(LC_ALL, '@LC_ALL@');
 
-// Site directory on the server's hard drive.
-// E.g. /home/vladykin/public_html/miaow
-define('SITE_DIR', '@SITE_DIR@');
-
 // Absolute site URL, with or without host name.
 // E.g. http://rain.ifmo.ru/~vladykin/miaow or /~vladykin/miaow
 define('SITE_URL', '@SITE_URL@');
@@ -32,6 +28,9 @@ define('SKIN', 'skins/default');
 
 ////////////////////////////////////////////////////////////////////////////
 // More settings. You don't need to edit or even understand this.
+
+// Site directory on the server's hard drive.
+define('SITE_DIR', dirname(__FILE__));
 
 define('TABLE_PREFIX', defined('TEST')? 'mt_' : 'm_');
 

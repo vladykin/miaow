@@ -24,15 +24,14 @@ $handler = HandlerFactory::getHandler($treeNode->getTypeName());
 $properties = $handler->getProperties($treePath);
 
 if (empty($_POST)) {
-    $template = new PageTemplate('admin', 'node_edit', array(
+    $template = new SkinTemplate('admin/node_edit', array(
         'action' => SITE_URL . '/node_edit.php/' . $treePath->toString(),
         'properties' => $properties
     ));
-    $template->set('title', 'Edit');
     $template->fillAndPrint();
 } else {
     foreach ($properties as &$property) {
-        $result = $property->parseValue($_POST[$property->getName()]);
+        $result = $property->parseValue(@$_POST[$property->getName()]);
         //assert('$result === true');
         switch ($property->getName()) {
         case 'name':

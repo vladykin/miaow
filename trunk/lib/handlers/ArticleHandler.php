@@ -22,9 +22,11 @@ class ArticleHandler implements Handler {
         $parser = new XhtmlParser();
         $transformer = new LinkTransformer(SITE_URL . '/index.php', SITE_URL . '/' . $dir);
         $parser->parseFile($dir . '/' . $treeNode->getProperty('file'), $transformer);
-        $content = new SkinTemplate('article/main');
-        $content->set('content', $parser->getContent());
-        $content->set('authors', $treeNode->getAuthors());
+        $template = new SkinTemplate('article/main');
+        $template->set('treePath', $treePath);
+        $template->set('treeNode', $treeNode);
+        $template->set('content', $parser->getContent());
+        $template->set('authors', $treeNode->getAuthors());
         if ($treeNode->getProperty('listChildren') || Session::isPrivileged()) {
             $db = Storage::getConnection();
             $query = 'SELECT * FROM ! WHERE parentId = ? AND (isVisible || ?)';
@@ -38,12 +40,8 @@ class ArticleHandler implements Handler {
                 $children[] = $handler->getPreview($treePath);
                 $treePath->popNode();
             }
-            $content->set('children', $children);
+            $template->set('children', $children);
         }
-        $template = new LayoutTemplate('default');
-        $template->set('treePath', $treePath);
-        $template->set('treeNode', $treeNode);
-        $template->set('content', $content);
         $template->fillAndPrint();
         return true;
     }
