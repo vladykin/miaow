@@ -6,29 +6,24 @@ require_once('config.php');
 require_once('lib/Tree.php');
 require_once('lib/HandlerFactory.php');
 require_once('lib/HTTP.php');
-require_once('lib/Users.php');
-
-session_start();
-
-$user =& Users::getCurrentUser();
-assert('is_a($user, \'User\')');
+require_once('lib/Session.php');
 
 $pathInfo = strval(@$_SERVER['PATH_INFO']);
-$treePath =& Tree::resolvePath($pathInfo);
+$treePath = Tree::resolvePath($pathInfo);
 if ($treePath == null) {
     HTTP::notFound();
     exit(1);
 }
 
-$node =& $treePath->getNode();
+$node = $treePath->getNode();
 
-if (!$node->getIsVisible() && !$user->isAdmin()) {
+if (!$node->getIsVisible() && !Session::isPrivileged()) {
     HTTP::forbidden();
     exit(1);
 }
 
-$handler =& HandlerFactory::getHandler($node->getTypeName());
-if (!$handler->handle($treePath, array())) {
+$handler = HandlerFactory::getHandler($node->getTypeName());
+if (!$handler->handle($treePath)) {
     HTTP::internalServerError();
     exit(1);
 }

@@ -34,7 +34,7 @@ class XhtmlParser {
         $this->stack = array();
         $this->content = '';
         $this->emptyTag = false;
-        $this->transformer =& $transformer;
+        $this->transformer = $transformer;
         $parser = xml_parser_create('UTF-8');
         xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, 0);
         xml_set_object($parser, $this);

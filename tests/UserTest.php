@@ -21,7 +21,7 @@ class tests_UserTest extends PHPUnit_TestCase {
 
     function testPersistFindRemove() {
         // create and persist a user
-        $entity =& new User();
+        $entity = new User();
         $this->assertEquals(0, $entity->getId());
         $entity->setName('PFR User');
         $entity->setEmail('pfr@user.com');
@@ -30,7 +30,7 @@ class tests_UserTest extends PHPUnit_TestCase {
         $id = $entity->getId();
         $this->assertTrue($entity->getId() > 0);
         // now try to get it back
-        $entity =& EntityManager::find('User', $id);
+        $entity = EntityManager::find('User', $id);
         $this->assertNotNull($entity);
         $this->assertEquals($id, $entity->getId());
         $this->assertEquals('PFR User', $entity->getName());
@@ -39,13 +39,13 @@ class tests_UserTest extends PHPUnit_TestCase {
         // remove user from storage
         EntityManager::remove($entity);
         // check that it has been removed
-        $entity =& EntityManager::find('User', $id);
+        $entity = EntityManager::find('User', $id);
         $this->assertNull($entity);
     }
 
     function testUpdate() {
         // create and persist a user
-        $entity =& new User();
+        $entity = new User();
         $entity->setName('U User');
         $entity->setEmail('u@user.com');
         $entity->setPassword('uuuuuu');
@@ -57,7 +57,7 @@ class tests_UserTest extends PHPUnit_TestCase {
         $entity->setPassword('uuuuuuu');
         EntityManager::persist($entity);
         // get it back and verify updates
-        $entity =& EntityManager::find('User', $id);
+        $entity = EntityManager::find('User', $id);
         $this->assertEquals('UU User', $entity->getName());
         $this->assertEquals('uu@user.com', $entity->getEmail());
         $this->assertEquals('uuuuuuu', $entity->getPassword());
@@ -65,25 +65,25 @@ class tests_UserTest extends PHPUnit_TestCase {
 
     function testNativeQuery() {
         // create and persist a user
-        $entity =& new User();
+        $entity = new User();
         $entity->setName('NQ User 1');
         $entity->setEmail('nq1@user.com');
         $entity->setPassword('nq1nq1');
         EntityManager::persist($entity);
         $id = $entity->getId();
         // create and persist another user
-        $entity =& new User();
+        $entity = new User();
         $entity->setName('NQ User 2');
         $entity->setEmail('nq2@user.com');
         $entity->setPassword('nq2nq2');
         EntityManager::persist($entity);
         // now issue a native query to storage
-        $db =& Storage::getConnection();
+        $db = Storage::getConnection();
         $query = 'SELECT * FROM `!` WHERE `password` = ?';
-        $row =& $db->getRow($query, array(
+        $row = $db->getRow($query, array(
             User::getTableName(), 'nq1nq1'));
         $this->assertType('array', $row);
-        $entity =& EntityManager::decode($row, 'User');
+        $entity = EntityManager::decode($row, 'User');
         // check that we've got expected result
         $this->assertEquals($id, $entity->getId());
         $this->assertEquals('NQ User 1', $entity->getName());

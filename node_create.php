@@ -7,17 +7,12 @@ require_once('config.php');
 require_once('lib/Storage.php');
 require_once('lib/Tree.php');
 require_once('lib/HandlerFactory.php');
-require_once('lib/Users.php');
 require_once('lib/HTTP.php');
 require_once('lib/Properties.php');
+require_once('lib/Session.php');
 require_once('lib/Templates.php');
 
-session_start();
-
-$user = Users::getCurrentUser();
-assert('$user instanceof User');
-
-Users::requireLogin($user);
+Session::ensurePrivileged();
 
 $treePath = Tree::resolvePath(strval(@$_SERVER['PATH_INFO']));
 if ($treePath === null) {

@@ -2,8 +2,6 @@
 
 // $Id$
 
-require_once('lib/Util.php');
-
 /**
  * Templates are used to separate application logic from presentation.
  */
@@ -74,6 +72,9 @@ class SkinTemplate extends Template {
     }
 
 }
+
+// The classes below are deprecated.
+// They will live here for a while for backward compatibility.
 
 class LayoutTemplate extends SkinTemplate {
 

@@ -154,10 +154,10 @@ class EntityManager {
     function find($entityClass, $id) {
         assert('is_string($entityClass) && class_exists($entityClass)');
         assert('is_int($id) || is_string($id)');
-        $db =& Storage::getConnection();
+        $db = Storage::getConnection();
         eval('$tableName = ' . $entityClass . '::getTableName();');
         $query = 'SELECT * FROM `' . $tableName . '` WHERE id = ?';
-        $res =& $db->getRow($query, array($id));
+        $res = $db->getRow($query, array($id));
         assert('!DB::isError($res)');
         if (is_array($res)) {
             return EntityManager::decode($res, $entityClass);
@@ -169,11 +169,11 @@ class EntityManager {
     function persist(/*Entity */&$entity) {
         assert('is_object($entity)');
         $entityClass = get_class($entity);
-        $db =& Storage::getConnection();
+        $db = Storage::getConnection();
         eval('$tableName = ' . $entityClass . '::getTableName();');
         eval('$fields = ' . $entityClass . '::getFields();');
         if (($id = $entity->getId()) == 0) {
-            $id =& $db->nextId($tableName, false);
+            $id = $db->nextId($tableName, false);
             assert('!DB::isError($id)');
             $entity->setId($id);
             $query = 'INSERT INTO ! VALUES (';
@@ -191,7 +191,7 @@ class EntityManager {
                 $args[] = $field->encode($entity->$getterName());
             }
             $query .= ')';
-            $res =& $db->query($query, $args);
+            $res = $db->query($query, $args);
             assert('!DB::isError($res)');
         } else {
             $query = 'UPDATE ! SET ';
@@ -213,7 +213,7 @@ class EntityManager {
             }
             $query .= ' WHERE `id` = ?';
             $args[] = $id;
-            $res =& $db->query($query, $args);
+            $res = $db->query($query, $args);
             assert('!DB::isError($res)');
         }
     }
@@ -221,17 +221,17 @@ class EntityManager {
     function remove(/*Entity */&$entity) {
         assert('is_object($entity)');
         assert('$entity->getId() > 0');
-        $db =& Storage::getConnection();
+        $db = Storage::getConnection();
         eval('$tableName = ' . get_class($entity) . '::getTableName();');
         $query = 'DELETE FROM ! WHERE `id` = ?';
-        $res =& $db->query($query, array($tableName, $entity->getId()));
+        $res = $db->query($query, array($tableName, $entity->getId()));
         assert('!DB::isError($res)');
         $entity->setId(0);
     }
 
     function installEntityClass($entityClass) {
         assert('is_string($entityClass) && class_exists($entityClass)');
-        $db =& Storage::getConnection();
+        $db = Storage::getConnection();
         eval('$tableName = ' . $entityClass . '::getTableName();');
         eval('$fields = ' . $entityClass . '::getFields();');
         eval('$pk = ' . $entityClass . '::getPrimaryKeyField();');
@@ -246,17 +246,17 @@ class EntityManager {
             }
         }
         $query .= ')';
-        $res =& $db->query($query);
+        $res = $db->query($query);
         assert('!DB::isError($res)');
-        $res =& $db->createSequence($tableName);
+        $res = $db->createSequence($tableName);
         assert('!DB::isError($res)');
     }
 
     function uninstallEntityClass($entityClass) {
         assert('is_string($entityClass)');
-        $db =& Storage::getConnection();
+        $db = Storage::getConnection();
         eval('$tableName = ' . $entityClass . '::getTableName();');
-        $res =& $db->query('DROP TABLE `' . $tableName . '`');
+        $res = $db->query('DROP TABLE `' . $tableName . '`');
         assert('!DB::isError($res) || $res->getCode() == DB_ERROR_NOSUCHTABLE');
         $db->dropSequence($tableName);
     }

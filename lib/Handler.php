@@ -12,14 +12,14 @@ interface Handler {
      * @param array $options
      * @return boolean
      */
-    public function handle(TreePath $treePath, $options);
+    public function handle(TreePath $treePath, $options = array());
 
     /**
      * @param TreePath $treePath
      * @param array $options
      * @return string
      */
-    public function getPreview(TreePath $treePath, $options);
+    public function getPreview(TreePath $treePath, $options = array());
 
     /**
      * @param TreePath $treePath

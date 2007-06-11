@@ -7,16 +7,11 @@ require_once('config.php');
 require_once('lib/Storage.php');
 require_once('lib/Tree.php');
 require_once('lib/HandlerFactory.php');
-require_once('lib/Users.php');
 require_once('lib/HTTP.php');
 require_once('lib/Templates.php');
+require_once('lib/Session.php');
 
-session_start();
-
-$user = Users::getCurrentUser();
-assert('is_a($user, \'User\')');
-
-Users::requireLogin($user);
+Session::ensurePrivileged();
 
 $treePath = Tree::resolvePath(strval(@$_SERVER['PATH_INFO']));
 if ($treePath === null) {
@@ -24,12 +19,12 @@ if ($treePath === null) {
     exit(1);
 }
 
-$treeNode =& $treePath->getNode();
-$handler =& HandlerFactory::getHandler($treeNode->getTypeName());
-$properties =& $handler->getProperties($treePath);
+$treeNode = $treePath->getNode();
+$handler = HandlerFactory::getHandler($treeNode->getTypeName());
+$properties = $handler->getProperties($treePath);
 
 if (empty($_POST)) {
-    $template =& new PageTemplate('admin', 'node_edit', array(
+    $template = new PageTemplate('admin', 'node_edit', array(
         'action' => SITE_URL . '/node_edit.php/' . $treePath->toString(),
         'properties' => $properties
     ));
