@@ -15,7 +15,6 @@ class ImageHandler implements Handler {
     }
 
     public function getPreview(TreePath $treePath, $options = array()) {
-        assert('is_a($treePath, \'TreePath\')');
         $treeNode = $treePath->getNode();
         return '<a href="' . $treePath->toURL() . '">' . $treeNode->getTitle() . '</a>'; 
     }

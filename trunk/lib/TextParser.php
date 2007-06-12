@@ -6,9 +6,8 @@ class TextParser {
 
     var $linkTransformer;
 
-    function parse($text, $linkTransformer) {
+    function parse($text, LinkTransformer $linkTransformer) {
         assert('is_string($text)');
-        assert('is_a($linkTransformer, \'LinkTransformer\')');
         $this->linkTransformer = $linkTransformer;
         $text = preg_replace_callback(
             '/(action|archive|href|src)\s*\=\s*\"(.*?)\"/',
