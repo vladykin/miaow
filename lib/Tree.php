@@ -8,8 +8,7 @@ require_once('lib/TreePath.php');
 
 class Tree {
 
-    function &findPath(&$node) {
-        assert('is_a($node, \'TreeNode\')');
+    function findPath(TreeNode $node) {
         $db = Storage::getConnection();
         $nodes = array();
         $nodes[] = $node;
@@ -58,9 +57,7 @@ class Tree {
         return new TreePath($nodes);
     }
 
-    function persistNode(/*TreeNode */&$node, /*TreePath */$path = null) {
-        assert('is_a($node, \'TreeNode\')');
-        assert('is_null($path) || is_a($path, \'TreePath\')');
+    function persistNode(TreeNode $node, TreePath $path = null) {
         if (isset($path)) {
             if ($path->getNodeCount() > 0) {
                 for ($i = 0; $i < $path->getNodeCount(); ++$i) {
@@ -92,8 +89,7 @@ class Tree {
         return true;
     }
 
-    function removeNode(/*TreeNode */&$node, $recursive = false) {
-        assert('is_a($node, \'TreeNode\')');
+    function removeNode(TreeNode $node, $recursive = false) {
         assert('is_bool($recursive)');
         assert('$node->getId() > 0');
         $db = Storage::getConnection();

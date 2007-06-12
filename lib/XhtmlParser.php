@@ -23,9 +23,8 @@ class XhtmlParser {
     /**
      * @access public
      */
-    function parse($xhtml, &$transformer) {
+    function parse($xhtml, LinkTransformer $transformer) {
         assert('is_string($xhtml)');
-        assert('is_a($transformer, \'LinkTransformer\')');
         if (substr($xhtml, 0, 5) != '<?xml') {
             // dirty hack to handle old pages
             // all pages should eventually use strict XHTML syntax
@@ -49,9 +48,8 @@ class XhtmlParser {
     /**
      * @access public
      */
-    function parseFile($xhtmlfile, &$transformer) {
+    function parseFile($xhtmlfile, LinkTransformer $transformer) {
         assert('is_string($xhtmlfile) && file_exists($xhtmlfile)');
-        assert('is_a($transformer, \'LinkTransformer\')');
         $this->parse(file_get_contents($xhtmlfile), $transformer);
     }
     

@@ -41,8 +41,7 @@ class TreePath {
      * @access public
      * @param TreeNode $node
      */
-    function pushNode(&$node) {
-        assert('is_a($node, \'TreeNode\')');
+    function pushNode(TreeNode $node) {
         if (!empty($this->nodes)) {
             $prevnode = end($this->nodes);
             assert('$prevnode->getId() == $node->getParentId()');

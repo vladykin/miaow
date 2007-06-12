@@ -13,7 +13,7 @@ interface Relation {
 
 class RelationManager {
 
-    /*public static */function addTriples($relationClass, $subjId, $objId) {
+    public static function addTriples($relationClass, $subjId, $objId) {
         assert('is_string($relationClass) && class_exists($relationClass)');
         assert('is_int($subjId) || is_array($subjId)');
         assert('is_int($objId) || is_array($objId)');
@@ -34,7 +34,7 @@ class RelationManager {
         assert('!DB::isError($res)');
     }
 
-    /*public static */function removeTriples($relationClass, $subjId, $objId) {
+    public static function removeTriples($relationClass, $subjId, $objId) {
         assert('is_string($relationClass) && class_exists($relationClass)');
         assert('is_null($subjId) || is_int($subjId) || is_array($subjId)');
         assert('is_null($objId) || is_int($objId) || is_array($objId)');
@@ -58,7 +58,7 @@ class RelationManager {
         assert('!DB::isError($res)');
     }
 
-    /*public static */function findTriples($relationClass, $subjId, $objId) {
+    public static function findTriples($relationClass, $subjId, $objId) {
         assert('is_string($relationClass) && class_exists($relationClass)');
         assert('is_null($subjId) || is_int($subjId) || is_array($subjId)');
         assert('is_null($objId) || is_int($objId) || is_array($objId)');
@@ -117,22 +117,20 @@ class RelationManager {
         return $res;
     }
 
-    /*public static */function getMapping($relationClass, /*Entity */$subject) {
+    public static function getMapping($relationClass, Entity $subject) {
         assert('is_string($relationClass) && class_exists($relationClass)');
-        assert('is_a($subject, \'Entity\')');
         return RelationManager::findEntities($relationClass, $subject->getId(), null);
     }
 
-    /*public static */function setMapping($relationClass, /*Entity */$subject, $objects) {
+    public static function setMapping($relationClass, Entity $subject, $objects) {
         assert('is_string($relationClass) && class_exists($relationClass)');
-        assert('is_a($subject, \'Entity\')');
         assert('Util::isArrayOf($objects, \'Entity\')');
         RelationManager::removeTriples($relationClass, $subject->getId(), null);
         RelationManager::addTriples($relationClass, $subject->getId(), array_map(
                 create_function('$obj', 'return $obj->getId();'), $objects));
     }
 
-    /*public static */function installRelationClass($relationClass) {
+    public static function installRelationClass($relationClass) {
         assert('is_string($relationClass) && class_exists($relationClass)');
         $db = Storage::getConnection();
         eval('$subjClass = ' . $relationClass . '::getSubjectClass();');
@@ -149,7 +147,7 @@ class RelationManager {
         assert('!DB::isError($res)');
     }
 
-    /*public static */function uninstallRelationClass($relationClass) {
+    public static function uninstallRelationClass($relationClass) {
         assert('is_string($relationClass)');
         $db = Storage::getConnection();
         $res = $db->query('DROP TABLE `' . $relationClass . '`');

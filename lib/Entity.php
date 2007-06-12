@@ -166,7 +166,7 @@ class EntityManager {
         }
     }
 
-    function persist(/*Entity */&$entity) {
+    function persist(Entity $entity) {
         assert('is_object($entity)');
         $entityClass = get_class($entity);
         $db = Storage::getConnection();
@@ -218,7 +218,7 @@ class EntityManager {
         }
     }
 
-    function remove(/*Entity */&$entity) {
+    function remove(Entity $entity) {
         assert('is_object($entity)');
         assert('$entity->getId() > 0');
         $db = Storage::getConnection();

@@ -56,7 +56,6 @@ class GalleryHandler implements Handler {
      * @return array
      */
     public function getProperties(TreePath $treePath) {
-        assert('is_a($treePath, \'TreePath\')');
         $treeNode = $treePath->getNode();
         return array(
             new TextProperty('Title', 'title', $treeNode->getTitle()),
