@@ -44,7 +44,7 @@ class TreePath {
     function pushNode(TreeNode $node) {
         if (!empty($this->nodes)) {
             $prevnode = end($this->nodes);
-            assert('$prevnode->getId() == $node->getParentId()');
+            assert('$prevnode->getId() == $node->getParentId() || $node->getId() == 0');
         }
         $this->nodes[] = $node;
     }

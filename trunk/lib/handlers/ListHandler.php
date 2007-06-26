@@ -10,7 +10,7 @@ require_once('lib/Properties.php');
 require_once('lib/Templates.php');
 
 
-class ListHandler implements Handler {
+class ListHandler extends DefaultHandler {
 
     public function handle(TreePath $treePath, $options = array()) {
         $db = Storage::getConnection();
@@ -61,9 +61,7 @@ class ListHandler implements Handler {
         return array(
             new TextProperty('Title', 'title', $treeNode->getTitle()),
             new OrderProperty('Order by', 'order', $treeNode->getProperty('order')),
-            new VisibilityProperty($treeNode->getIsVisible()),
-            new UserListProperty('Authors', 'authors', array()),
-            new KeywordListProperty('Keywords', 'keywords', array()),
+            new VisibilityProperty($treeNode->getIsVisible())
         );
     }
 

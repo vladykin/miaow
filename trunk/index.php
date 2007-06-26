@@ -22,8 +22,15 @@ if (!$node->getIsVisible() && !Session::isPrivileged()) {
     exit(1);
 }
 
+$action = strval(@$_GET['action']);
+
+if ($action) {
+    Session::ensurePrivileged();
+}
+
 $handler = HandlerFactory::getHandler($node->getTypeName());
-if (!$handler->handle($treePath)) {
+$method = 'handle' . ucfirst($action);
+if (!$handler->$method($treePath)) {
     HTTP::internalServerError();
     exit(1);
 }
