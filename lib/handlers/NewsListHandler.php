@@ -10,7 +10,7 @@ require_once('lib/Properties.php');
 require_once('lib/Templates.php');
 
 
-class NewsListHandler implements Handler {
+class NewsListHandler extends DefaultHandler {
 
     public function handle(TreePath $treePath, $options = array()) {
         $treeNode = $treePath->getNode();

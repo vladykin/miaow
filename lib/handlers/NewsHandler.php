@@ -11,7 +11,7 @@ require_once('lib/Properties.php');
 require_once('lib/Templates.php');
 
 
-class NewsHandler implements Handler {
+class NewsHandler extends DefaultHandler {
 
     /**
      * @access public

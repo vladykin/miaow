@@ -8,7 +8,7 @@ require_once('lib/XhtmlParser.php');
 require_once('lib/Properties.php');
 require_once('lib/Templates.php');
 
-class ArticleHandler implements Handler {
+class ArticleHandler extends DefaultHandler {
 
     /**
      * @access public
@@ -69,9 +69,7 @@ class ArticleHandler implements Handler {
             new FileProperty('File', 'file',
                     $treeNode->getProperty('file'),
                     $treePath->getDirectory()),
-            new VisibilityProperty($treeNode->getIsVisible()),
-            new UserListProperty('Authors', 'authors', array()),
-            new KeywordListProperty('Keywords', 'keywords', array()),
+            new VisibilityProperty($treeNode->getIsVisible())
         );
     }
 

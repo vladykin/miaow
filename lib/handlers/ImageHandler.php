@@ -4,7 +4,7 @@
 
 require_once('lib/Handler.php');
 
-class ImageHandler implements Handler {
+class ImageHandler extends DefaultHandler {
 
     public function handle(TreePath $treePath, $options = array()) {
         $treeNode = $treePath->popNode();

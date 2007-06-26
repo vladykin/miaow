@@ -8,7 +8,7 @@ require_once('lib/XhtmlParser.php');
 require_once('lib/Properties.php');
 require_once('lib/Templates.php');
 
-class GalleryHandler implements Handler {
+class GalleryHandler extends DefaultHandler {
 
     /**
      * @access public
@@ -59,9 +59,7 @@ class GalleryHandler implements Handler {
         $treeNode = $treePath->getNode();
         return array(
             new TextProperty('Title', 'title', $treeNode->getTitle()),
-            new VisibilityProperty($treeNode->getIsVisible()),
-            new UserListProperty('Authors', 'authors', array()),
-            new KeywordListProperty('Keywords', 'keywords', array()),
+            new VisibilityProperty($treeNode->getIsVisible())
         );
     }
 
