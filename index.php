@@ -22,14 +22,19 @@ if (!$node->getIsVisible() && !Session::isPrivileged()) {
     exit(1);
 }
 
+$handler = HandlerFactory::getHandler($node->getTypeName());
+
 $action = strval(@$_GET['action']);
+$method = 'handle' . ucfirst($action);
+if (!method_exists($handler, $method)) {
+    $action = '';
+    $method = 'handle';
+}
 
 if ($action) {
     Session::ensurePrivileged();
 }
 
-$handler = HandlerFactory::getHandler($node->getTypeName());
-$method = 'handle' . ucfirst($action);
 if (!$handler->$method($treePath)) {
     HTTP::internalServerError();
     exit(1);
