@@ -1,0 +1,25 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<title>Creating new page</title>
+</head>
+<body>
+
+<h1>Creating new page</h1>
+
+<form action="<?= $action ?>" method="post">
+<legend>Choose type of the page to create</legend>
+<p>
+<select name="typeName">
+<option>Gallery</option>
+<option>Image</option>
+<option>News</option>
+<option>Article</option>
+</select>
+<button type="submit">OK</button>
+</p>
+</form>
+
+</body>
+</html>

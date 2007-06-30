@@ -6,13 +6,12 @@ require_once('lib/Handler.php');
 require_once('lib/HandlerFactory.php');
 require_once('lib/Util.php');
 require_once('lib/XhtmlParser.php');
-require_once('lib/Properties.php');
 require_once('lib/Templates.php');
 
 
-class NewsListHandler extends DefaultHandler {
+class NewsListHandler extends Handler {
 
-    public function handle(TreePath $treePath, $options = array()) {
+    public function handle(TreePath $treePath, $params = array()) {
         $treeNode = $treePath->getNode();
         $db = Storage::getConnection();
         $query = 'SELECT DISTINCT YEAR(`datePublished`) FROM `!` WHERE `parentId` = ? AND (? || `isVisible`) ORDER BY `datePublished` DESC';
@@ -52,17 +51,33 @@ class NewsListHandler extends DefaultHandler {
         return true;
     }
 
-    public function getPreview(TreePath $treePath, $options = array()) {
-        $treeNode = $treePath->getNode();
-        return '<a href="' . $treePath->toURL() . '">' . $treeNode->getTitle() . '</a>';
+    public function handleEdit(TreePath $treePath, $params = array()) {
+        $newslist = $treePath->getNode();
+        $template = new SkinTemplate('news/list_edit');
+        $template->set('treePath', $treePath);
+        $template->set('article', $newslist);
+        $template->set('action', '?action=editSave');
+        $template->set('title', $newslist->getTitle());
+        $template->set('isVisible', $newslist->getIsVisible());
+        $template->fillAndPrint();
+        return true;
     }
 
-    public function getProperties(TreePath $treePath) {
-        $treeNode = $treePath->getNode();
-        return array(
-            new TextProperty('Title', 'title', $treeNode->getTitle()),
-            new VisibilityProperty($treeNode->getIsVisible())
-        );
+    public function handleSaveEdited(TreePath $treePath, $params = array()) {
+        $newslist = $treePath->getNode();
+        $newslist->setTitle((string)@$_POST['title']);
+        $newslist->setIsVisible((bool)@$_POST['isVisible']);
+        $result = Tree::persistNode($newslist);
+        HTTP::seeOther($treePath->toURL());
+        return $result;
+    }
+
+    public function xhandleCreate(TreePath $treePath, $params = array()) {
+        return false;
+    }
+
+    public function xhandleSaveCreated(TreePath $treePath, $params = array()) {
+        return false;
     }
 
 }

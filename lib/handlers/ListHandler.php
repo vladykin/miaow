@@ -6,13 +6,12 @@ require_once('lib/Handler.php');
 require_once('lib/HandlerFactory.php');
 require_once('lib/Util.php');
 require_once('lib/XhtmlParser.php');
-require_once('lib/Properties.php');
 require_once('lib/Templates.php');
 
 
-class ListHandler extends DefaultHandler {
+class ListHandler extends Handler {
 
-    public function handle(TreePath $treePath, $options = array()) {
+    public function handle(TreePath $treePath, $params = array()) {
         $db = Storage::getConnection();
         $treeNode = $treePath->getNode();
 
@@ -51,18 +50,35 @@ class ListHandler extends DefaultHandler {
         return true;
     }
 
-    public function getPreview(TreePath $treePath, $options = array()) {
-        $treeNode = $treePath->getNode();
-        return '<a href="' . $treePath->toURL() . '">' . $treeNode->getTitle() . '</a>';
+    public function handleEdit(TreePath $treePath, $params = array()) {
+        $list = $treePath->getNode();
+        $template = new SkinTemplate('list/edit');
+        $template->set('treePath', $treePath);
+        $template->set('list', $list);
+        $template->set('action', '?action=editSave');
+        $template->set('title', $list->getTitle());
+        $template->set('isVisible', $list->getIsVisible());
+        $template->set('order', $list->getProperty('order'));
+        $template->fillAndPrint();
+        return true;
     }
 
-    public function getProperties(TreePath $treePath) {
-        $treeNode = $treePath->getNode();
-        return array(
-            new TextProperty('Title', 'title', $treeNode->getTitle()),
-            new OrderProperty('Order by', 'order', $treeNode->getProperty('order')),
-            new VisibilityProperty($treeNode->getIsVisible())
-        );
+    public function handleSaveEdited(TreePath $treePath, $params = array()) {
+        $list = $treePath->getNode();
+        $list->setTitle((string)@$_POST['title']);
+        $list->setIsVisible((bool)@$_POST['isVisible']);
+        $list->setProperty('order', (string)@$_POST['order']);
+        $result = Tree::persistNode($list);
+        HTTP::seeOther($treePath->toURL());
+        return $result;
+    }
+
+    public function xhandleCreate(TreePath $treePath, $params = array()) {
+        return false;
+    }
+
+    public function xhandleSaveCreated(TreePath $treePath, $params = array()) {
+        return false;
     }
 
 }

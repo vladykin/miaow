@@ -8,7 +8,12 @@ require_once('lib/TreePath.php');
 
 class Tree {
 
-    function findPath(TreeNode $node) {
+    /**
+     * This is utility class that can't be instantiated.
+     */
+    private function __construct() {}
+
+    public static function findPath(TreeNode $node) {
         $db = Storage::getConnection();
         $nodes = array();
         $nodes[] = $node;
@@ -27,10 +32,9 @@ class Tree {
     }
 
     /**
-     * @access public static
      * @return TreePath
      */
-    function resolvePath($path) {
+    public static function resolvePath($path) {
         assert('is_string($path)');
         $db = Storage::getConnection();
         $query = 'SELECT * FROM `!` WHERE `parentId` = ?';

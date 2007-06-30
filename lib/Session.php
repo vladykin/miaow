@@ -37,7 +37,7 @@ class Session {
     public static function ensurePrivileged() {
         if (!self::isPrivileged()) {
             HTTP::seeOther(SITE_URL . '/login.php?redirect='
-                    . $_SERVER['REQUEST_URI']);
+                    . urlencode($_SERVER['REQUEST_URI']));
             exit(1);
         }
     }

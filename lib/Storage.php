@@ -10,9 +10,9 @@ require_once('DB.php');
 class Storage {
 
     /**
-     * @access private
+     * This is utility class that can't be instantiated.
      */
-    function Storage() {}
+    private function __construct() {}
 
     /**
      * @access public static

@@ -5,18 +5,16 @@
 require_once('lib/Handler.php');
 require_once('lib/LinkTransformer.php');
 require_once('lib/XhtmlParser.php');
-require_once('lib/Properties.php');
 require_once('lib/Templates.php');
 
-class ArticleHandler extends DefaultHandler {
+class ArticleHandler extends Handler {
 
     /**
-     * @access public
      * @param TreePath $treePath
-     * @param array $options
+     * @param array $params
      * @return boolean
      */
-    public function handle(TreePath $treePath, $options = array()) {
+    public function handle(TreePath $treePath, $params = array()) {
         $treeNode = $treePath->getNode();
         $dir = $treePath->getDirectory();
         $parser = new XhtmlParser();
@@ -46,31 +44,35 @@ class ArticleHandler extends DefaultHandler {
         return true;
     }
 
-    /**
-     * @access public abstract
-     * @param TreePath $treePath
-     * @param array $options
-     * @return string
-     */
-    public function getPreview(TreePath $treePath, $options = array()) {
-        $treeNode = $treePath->getNode();
-        return '<a href="' . $treePath->toURL() . '">' . $treeNode->getTitle() . '</a>';
+    public function handleEdit(TreePath $treePath, $params = array()) {
+        $article = $treePath->getNode();
+        $template = new SkinTemplate('article/edit');
+        $template->set('treePath', $treePath);
+        $template->set('article', $article);
+        $template->set('action', '?action=editSave');
+        $template->set('title', $article->getTitle());
+        $template->set('isVisible', $article->getIsVisible());
+        $template->set('file', $article->getProperty('file'));
+        $template->fillAndPrint();
+        return true;
     }
 
-    /**
-     * @access public abstract
-     * @param TreePath $treePath
-     * @return array
-     */
-    public function getProperties(TreePath $treePath) {
-        $treeNode = $treePath->getNode();
-        return array(
-            new TextProperty('Title', 'title', $treeNode->getTitle()),
-            new FileProperty('File', 'file',
-                    $treeNode->getProperty('file'),
-                    $treePath->getDirectory()),
-            new VisibilityProperty($treeNode->getIsVisible())
-        );
+    public function handleSaveEdited(TreePath $treePath, $params = array()) {
+        $article = $treePath->getNode();
+        $article->setTitle((string)@$_POST['title']);
+        $article->setIsVisible((bool)@$_POST['isVisible']);
+        $article->setProperty('file', (string)@$_POST['file']);
+        $result = Tree::persistNode($article);
+        HTTP::seeOther($treePath->toURL());
+        return $result;
+    }
+
+    public function xhandleCreate(TreePath $treePath, $params = array()) {
+        return false;
+    }
+
+    public function xhandleSaveCreated(TreePath $treePath, $params = array()) {
+        return false;
     }
 
 }
