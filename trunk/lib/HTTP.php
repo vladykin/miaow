@@ -10,7 +10,6 @@ require_once('lib/Templates.php');
 class HTTP {
 
     function seeOther($url) {
-        assert('is_string($url) && substr($url, 0, 1) == \'/\'');
         header('HTTP/1.1 303 See Other');
         header('Location: ' . $url);
         $template = new SkinTemplate('http/303');
