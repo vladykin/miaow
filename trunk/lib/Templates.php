@@ -65,8 +65,8 @@ class SkinTemplate extends Template {
     }
 
     public function fillAndPrint() {
-        foreach ($this->vars as $name => $value) {
-            eval("\$$name = \$value;");
+        foreach ($this->vars as $_name => $_value) {
+            eval("\$$_name = \$_value;");
         }
         include(SITE_DIR . '/' . SKIN . '/' . $this->url . '.phtml');
     }

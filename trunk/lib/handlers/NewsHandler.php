@@ -7,23 +7,21 @@
 require_once('lib/Handler.php');
 require_once('lib/LinkTransformer.php');
 require_once('lib/TextParser.php');
-require_once('lib/Properties.php');
 require_once('lib/Templates.php');
 
 
-class NewsHandler extends DefaultHandler {
+class NewsHandler extends Handler {
 
     /**
-     * @access public
      * @param TreePath $treePath
      * @return boolean
      */
-    public function handle(TreePath $treePath, $options = array()) {
+    public function handle(TreePath $treePath, $params = array()) {
         $treeNode = $treePath->getNode();
         $directory = $treePath->getDirectory();
         $file = $treeNode->getProperty('file');
         $transformer = new LinkTransformer(TREE_ROOT, '?');
-        if (isset($file))  {
+        if ($file) {
             $parser = new XhtmlParser();
             $parser->parseFile($file, $transformer);
             $content = $parser->getContent();
@@ -40,11 +38,10 @@ class NewsHandler extends DefaultHandler {
     }
     
     /**
-     * @access public
      * @param TreePath $treePath
      * @return string
      */
-    public function getPreview(TreePath $treePath, $options = array()) {
+    public function getPreview(TreePath $treePath, $params = array()) {
         $treeNode = $treePath->getNode();
         $parser = new TextParser();
         $transformer = new LinkTransformer(SITE_URL . '/index.php', '?');
@@ -54,23 +51,37 @@ class NewsHandler extends DefaultHandler {
         return $t->fillAndReturn();
     }
 
-    /**
-     * @access public
-     * @param TreePath $treePath
-     * @return array
-     */
-    public function getProperties(TreePath $treePath) {
-        $treeNode = $treePath->getNode();
-        return array(
-            new TextProperty('Title', 'title', $treeNode->getTitle()),
-            new TextareaProperty('Preview', 'preview', $treeNode->getProperty('preview')),
-            new FileProperty('File', 'file',
-                $treeNode->getProperty('file'),
-                $treePath->getDirectory()),
-            new VisibilityProperty($treeNode->getIsVisible()),
-            new UserListProperty('Authors', 'authors', array()),
-            new KeywordListProperty('Keywords', 'keywords', array()),
-        );
+    public function handleEdit(TreePath $treePath, $params = array()) {
+        $news = $treePath->getNode();
+        $template = new SkinTemplate('news/edit');
+        $template->set('treePath', $treePath);
+        $template->set('news', $news);
+        $template->set('action', '?action=editSave');
+        $template->set('title', $news->getTitle());
+        $template->set('isVisible', $news->getIsVisible());
+        $template->set('preview', $news->getProperty('preview'));
+        $template->set('file', $news->getProperty('file'));
+        $template->fillAndPrint();
+        return true;
+    }
+
+    public function handleSaveEdited(TreePath $treePath, $params = array()) {
+        $news = $treePath->getNode();
+        $news->setTitle((string)@$_POST['title']);
+        $news->setIsVisible((bool)@$_POST['isVisible']);
+        $news->setProperty('preview', (string)@$_POST['preview']);
+        $news->setProperty('file', (string)@$_POST['file']);
+        $result = Tree::persistNode($news);
+        HTTP::seeOther($treePath->toURL());
+        return $result;
+    }
+
+    public function xhandleCreate(TreePath $treePath, $params = array()) {
+        return false;
+    }
+
+    public function xhandleSaveCreated(TreePath $treePath, $params = array()) {
+        return false;
     }
 
 }

@@ -5,13 +5,11 @@
 require_once('lib/Handler.php');
 require_once('lib/LinkTransformer.php');
 require_once('lib/XhtmlParser.php');
-require_once('lib/Properties.php');
 require_once('lib/Templates.php');
 
-class GalleryHandler extends DefaultHandler {
+class GalleryHandler extends Handler {
 
     /**
-     * @access public
      * @param TreePath $treePath
      * @return boolean
      */
@@ -22,45 +20,70 @@ class GalleryHandler extends DefaultHandler {
         $res = $db->getAll($query, array(TreeNode::getTableName(), $galleryNode->getId(), 1/*$user->isAdmin()*/));
         assert('!DB::isError($res)');
         $imageNodes = array();
+        $i = 0;
         foreach ($res as $row) {
             $imageNodes[] = $imageNode = EntityManager::decode($row, 'TreeNode');
             if ($imageNode->getName() == @$options['image']) {
                 $currentImage = $imageNode;
+                $currentIndex = $i;
             }
+            ++$i;
         }
-        if (!isset($currentImage)) {
+        if (!isset($currentImage) && count($imageNodes) > 0) {
+            $currentIndex = 0;
             $currentImage = $imageNodes[0];
         }
+        $query = 'SELECT * FROM ! WHERE parentId = ? AND (isVisible || ?) ORDER BY title';
+        $res = $db->getAll($query, array(TreeNode::getTableName(), $galleryNode->getParentId(), Session::isPrivileged()));
+        assert('!DB::isError($res)');
+        $leftLinks = array();
+        $treePath->popNode();
+        foreach ($res as $row) {
+            $leftLink = array();
+            $anotherGalleryNode = EntityManager::decode($row, 'TreeNode');
+            $leftLink['title'] = $anotherGalleryNode->getTitle();
+            $leftLink['selected'] = $anotherGalleryNode->getName() == $galleryNode->getName();
+            $treePath->pushNode($anotherGalleryNode);
+            $leftLink['href'] = $treePath->toURL();
+            $treePath->popNode();
+            $leftLinks[] = $leftLink;
+        }
+        $treePath->pushNode($galleryNode);
         $template = new SkinTemplate('gallery/main');
         $template->set('treePath', $treePath);
         $template->set('treeNode', $galleryNode);
         $template->set('imageNodes', $imageNodes);
-        $template->set('currentImage', $currentImage);
+        $template->set('currentImage', @$currentImage);
+        $template->set('currentIndex', @$currentIndex);
+        $template->set('leftLinks', $leftLinks);
         $template->fillAndPrint();
         return true;
     }
 
-    /**
-     * @access public abstract
-     * @param TreePath $treePath
-     * @return string
-     */
-    public function getPreview(TreePath $treePath, $options = array()) {
-        $treeNode = $treePath->getNode();
-        return '<a href="' . $treePath->toURL() . '">' . $treeNode->getTitle() . '</a>';
+    public function handleEdit(TreePath $treePath, $params = array()) {
+        return false;
     }
 
-    /**
-     * @access public abstract
-     * @param TreePath $treePath
-     * @return array
-     */
-    public function getProperties(TreePath $treePath) {
-        $treeNode = $treePath->getNode();
-        return array(
-            new TextProperty('Title', 'title', $treeNode->getTitle()),
-            new VisibilityProperty($treeNode->getIsVisible())
-        );
+    public function handleSaveEdited(TreePath $treePath, $params = array()) {
+        return false;
+    }
+
+    public function handleCreate(TreePath $treePath, $params = array()) {
+        $handler = HandlerFactory::getHandler('Image');
+        return $handler->xhandleCreate($treePath, $params);
+    }
+
+    public function handleSaveCreated(TreePath $treePath, $params = array()) {
+        $handler = HandlerFactory::getHandler('Image');
+        return $handler->xhandleSaveCreated($treePath, $params);
+    }
+
+    public function xhandleCreate(TreePath $treePath, $params = array()) {
+        return false;
+    }
+
+    public function xhandleSaveCreated(TreePath $treePath, $params = array()) {
+        return false;
     }
 
 }

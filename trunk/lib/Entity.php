@@ -111,17 +111,11 @@ class ForeignKeyField extends Field {
 }
 
 
-class Entity {
-    function getTableName() {
-        die('abstract function Entity::getTableName()');
-    }
-    function getFields() {
-        die('abstract function Entity::getFields()');
-    }
-    function getPrimaryKeyField() {
-        die('abstract function Entity::getPrimaryKeyField()');
-    }
-    function getField($className, $fieldName) {
+abstract class Entity {
+    public static abstract function getTableName();
+    public static abstract function getFields();
+    public static abstract function getPrimaryKeyField();
+    public static function getField($className, $fieldName) {
         assert('is_string($className) && class_exists($className)');
         assert('is_string($fieldName) && strlen($fieldName) > 0');
         eval('$fields = ' . $className . '::getFields();');

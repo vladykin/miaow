@@ -8,11 +8,11 @@ require_once('lib/Util.php');
 
 class Keyword extends Entity {
 
-    function getTableName() {
+    public static function getTableName() {
         return TABLE_PREFIX . __CLASS__;
     }
 
-    function getFields() {
+    public static function getFields() {
         return array(
             new IntField('id', 'INT UNSIGNED NOT NULL'),
             new TextField('uri', 'VARCHAR(128) NOT NULL'),
@@ -20,7 +20,7 @@ class Keyword extends Entity {
         );
     }
 
-    function getPrimaryKeyField() {
+    public static function getPrimaryKeyField() {
         return Entity::getField(__CLASS__, 'id');
     }
 
@@ -28,10 +28,7 @@ class Keyword extends Entity {
     var $uri;
     var $title;
 
-    /**
-     * @access public
-     */
-    function Keyword() {
+    public function Keyword() {
         $this->setId(0);
     }
 

@@ -14,16 +14,13 @@ define('XHTML_FOOTER',
 
 class XhtmlParser {
 
-    var $transformer;
+    private $transformer;
 
-    var $stack;
-    var $content;
-    var $emptyTag;
+    private $stack;
+    private $content;
+    private $emptyTag;
 
-    /**
-     * @access public
-     */
-    function parse($xhtml, LinkTransformer $transformer) {
+    public function parse($xhtml, LinkTransformer $transformer) {
         assert('is_string($xhtml)');
         if (substr($xhtml, 0, 5) != '<?xml') {
             // dirty hack to handle old pages
@@ -45,26 +42,19 @@ class XhtmlParser {
         xml_parser_free($parser);
     }
 
-    /**
-     * @access public
-     */
-    function parseFile($xhtmlfile, LinkTransformer $transformer) {
+    public function parseFile($xhtmlfile, LinkTransformer $transformer) {
         assert('is_string($xhtmlfile) && file_exists($xhtmlfile)');
         $this->parse(file_get_contents($xhtmlfile), $transformer);
     }
     
     /**
-     * @access public
      * @return string
      */
-    function getContent() {
+    public function getContent() {
         return $this->content;
     }
 
-    /**
-     * @access public
-     */
-    function handleOpenTag($parser, $name, $attrs) {
+    public function handleOpenTag($parser, $name, $attrs) {
 //        echo("open($name)");
         $this->stack[] = $name;
         if (count($this->stack) > 2 && $this->stack[1] == 'body') {
@@ -86,10 +76,7 @@ class XhtmlParser {
         }
     }
 
-    /**
-     * @access public
-     */
-    function handleCloseTag($parser, $name) {
+    public function handleCloseTag($parser, $name) {
 //        echo("close($name)");
         if (count($this->stack) > 2 && $this->stack[1] == 'body') {
             if ($this->isEmptyTag($name)) {
@@ -101,10 +88,7 @@ class XhtmlParser {
         array_pop($this->stack);
     }
 
-    /**
-     * @access public
-     */
-    function handleCharData($parser, $data) {
+    public function handleCharData($parser, $data) {
 //        echo("char($data)");
         if (count($this->stack) >= 2 && $this->stack[1] == 'body') {
             if (!$this->isEmptyTag(end($this->stack))) {
@@ -113,7 +97,7 @@ class XhtmlParser {
         }
     }
 
-    function isEmptyTag($name) {
+    private function isEmptyTag($name) {
         return $name == 'br' || $name == 'hr' || $name == 'img' || $name == 'param';
     }
 

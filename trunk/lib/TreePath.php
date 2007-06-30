@@ -2,29 +2,24 @@
 
 // $Id$
 
-require_once(dirname(__FILE__) . '/Util.php');
+require_once('lib/Util.php');
 
 class TreePath {
 
-    /**
-     * @access private
-     */
-    var $nodes;
+    private $nodes;
 
     /**
-     * @access public
      * @param array $nodes
      */
-    function TreePath($nodes = array()) {
+    public function __construct($nodes = array()) {
         assert('Util::isArrayOf($nodes, \'TreeNode\')');
         $this->nodes = $nodes;
     }
 
     /**
-     * @access public
      * @return TreeNode
      */
-    function getNode($index = null) {
+    public function getNode($index = null) {
         assert('isset($this->nodes)');
         assert('is_null($index) || is_int($index) && 0 <= $index && $index < count($this->nodes)');
         return isset($index)? 
@@ -32,16 +27,15 @@ class TreePath {
             $this->nodes[count($this->nodes) - 1];
     }
 
-    function getNodeCount() {
+    public function getNodeCount() {
         assert('isset($this->nodes)');
         return count($this->nodes);
     }
 
     /**
-     * @access public
      * @param TreeNode $node
      */
-    function pushNode(TreeNode $node) {
+    public function pushNode(TreeNode $node) {
         if (!empty($this->nodes)) {
             $prevnode = end($this->nodes);
             assert('$prevnode->getId() == $node->getParentId() || $node->getId() == 0');
@@ -49,20 +43,16 @@ class TreePath {
         $this->nodes[] = $node;
     }
     
-    /**
-     * @access public
-     */
-    function popNode() {
+    public function popNode() {
         assert('!empty($this->nodes)');
         return array_pop($this->nodes);
     }
 
 
     /**
-     * @access public
      * @return string
      */
-    function getDirectory() {
+    public function getDirectory() {
         assert('is_array($this->nodes) && !empty($this->nodes)');
         $dirs = array();
         for ($i = 0; $i < $this->getNodeCount(); ++$i) {
@@ -75,10 +65,9 @@ class TreePath {
     }
 
     /**
-     * @access public
      * @return string
      */
-    function toString() {
+    public function toString() {
         assert('!empty($this->nodes)');
         $path = array();
         for ($i = 1; $i < $this->getNodeCount(); ++$i) {
@@ -90,10 +79,9 @@ class TreePath {
     }
 
     /**
-     * @access public
      * @return string
      */
-    function toURL() {
+    public function toURL() {
         return rtrim(TREE_ROOT . '/' . $this->toString(), '/');
     }
 

@@ -5,7 +5,11 @@
 class HandlerFactory {
 
     /**
-     * @access public static
+     * This is utility class that can't be instantiated.
+     */
+    private function __construct() {}
+
+    /**
      * @return array
      */    
     public static function getKnownTypes() {
@@ -24,7 +28,6 @@ class HandlerFactory {
     }
 
     /**
-     * @access public static
      * @param string $nodeTypeName
      * @return Handler
      */
@@ -34,11 +37,10 @@ class HandlerFactory {
     }
 
     /**
-     * @access private static
      * @param string $className
      * @return Handler
      */
-    public static function createHandler($className) {
+    private static function createHandler($className) {
         assert('is_string($className) && strlen($className) > 0');
         static $instances = array();
         if (!array_key_exists($className, $instances)) {

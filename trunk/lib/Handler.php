@@ -5,57 +5,100 @@
 /**
  * Encapsulates all TreeNode-type-dependent behaviour.
  */
-interface Handler {
+abstract class Handler {
 
     /**
      * Called to display the node in normal mode.
      *
      * @param TreePath $treePath
-     * @param array $options
+     * @param array $params
      * @return boolean
      */
-    public function handle(TreePath $treePath, $options = array());
+    public abstract function handle(TreePath $treePath, $params = array());
 
     /**
      * Called to edit the node.
      * 
      * @param TreePath $treePath
-     * @param array $options
+     * @param array $params
      * @return boolean
      */
-    public function handleEdit(TreePath $treePath, $options = array());
+    public abstract function handleEdit(TreePath $treePath, $params = array());
 
     /**
-     * Called to create a new child of the node.
+     * Called to save edits.
+     * 
+     * @param TreePath $treePath
+     * @param array $params
+     * @return boolean
+     */
+    public abstract function handleSaveEdited(TreePath $treePath, $params = array());
+
+    /**
+     * Called to create a new node at the top of $treePath.
+     * Added 'x' at the beginning of the method name to prevent index.php
+     * from calling this method directly.
      *
      * @param TreePath $treePath
-     * @param array $options
+     * @param array $params
      * @return boolean
      */
-    public function handleChild(TreePath $treePath, $options = array());
+    public abstract function xhandleCreate(TreePath $treePath, $params = array());
 
     /**
-     * Sets default property values for given node
-     * (at top of $treePath).
+     * Called to save the newly created node at the top of $treePath.
+     * Added 'x' at the beginning of the method name to prevent index.php
+     * from calling this method directly.
      *
      * @param TreePath $treePath
-     * @param array $options
+     * @param array $params
      * @return boolean
      */
-    public function setDefaults(TreePath $treePath, $options = array());
+    public abstract function xhandleSaveCreated(TreePath $treePath, $params = array());
 
     /**
+     * Called to create a new child of this node.
+     * Passes control to appropriate handler's xhandleCreate().
+     *
      * @param TreePath $treePath
-     * @param array $options
+     * @param array $params
+     * @return boolean
+     */
+    public function handleCreate(TreePath $treePath, $params = array()) {
+        $typeName = strval(@$_POST['typeName']);
+        if ($typeName && in_array($typeName, HandlerFactory::getKnownTypes())) {
+            $handler = HandlerFactory::getHandler($typeName);
+            return $handler->xhandleCreate($treePath, $params);
+        } else {
+            $template = new SkinTemplate('admin/choose_type');
+            $template->set('action', '?action=create');
+            $template->fillAndPrint();
+            return true;
+        }
+    }
+
+    public function handleSaveCreated(TreePath $treePath, $params = array()) {
+        $typeName = strval(@$_POST['typeName']);
+        if ($typeName && in_array($typeName, HandlerFactory::getKnownTypes())) {
+            $handler = HandlerFactory::getHandler($typeName);
+            return $handler->xhandleSaveCreated($treePath, $params);
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Called to save the newly created child of this node.
+     * Passes control to appropriate handler's xhandleSaveCreated().
+     *
+     * @param TreePath $treePath
+     * @param array $params
      * @return string
      */
-    public function getPreview(TreePath $treePath, $options = array());
-
-    /**
-     * @param TreePath $treePath
-     * @return array
-     */
-    public function getProperties(TreePath $treePath);
+    public function getPreview(TreePath $treePath, $params = array()) {
+        $treeNode = $treePath->getNode();
+        return '<a href="' . $treePath->toURL() . '">' . $treeNode->getTitle() . '</a>';
+    }
 
 }
 
@@ -63,9 +106,10 @@ interface Handler {
 /**
  * Helper class with default implementations of some methods.
  */
+/*
 abstract class DefaultHandler {
 
-    public function handleEdit(TreePath $treePath, $options = array()) {
+    public function handleEdit(TreePath $treePath, $params = array()) {
         $treeNode = $treePath->getNode();
         $properties = $this->getProperties($treePath);
         if (empty($_POST)) {
@@ -101,7 +145,7 @@ abstract class DefaultHandler {
         return true;
     }
 
-    public function handleChild(TreePath $treePath, $options = array()) {
+    public function handleNewChild(TreePath $treePath, $params = array()) {
         if (empty($_POST)) {
             $template = new SkinTemplate('admin/node_create', array(
                 'action' => '?action=child',
@@ -147,12 +191,7 @@ abstract class DefaultHandler {
         return true;
     }
 
-    public function setDefaults(TreePath $treePath, $options = array()) {
-        $treeNode = $treePath->getNode();
-        $treeNode->setTitle('Enter node title');
-        $treeNode->setIsVisible(true);
-    }
-
 }
+*/
 
 ?>
