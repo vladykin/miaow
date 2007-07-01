@@ -3,17 +3,31 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Edit list properties</title>
+<title>Edit gallery properties</title>
 </head>
 <body>
 
-<form name="edit" id="edit" action="<?= $action ?>" method="post">
+<form action="<?= $action ?>" method="post">
 <fieldset>
-<legend>Edit list properties</legend>
+<legend>Edit gallery properties</legend>
 <table>
 
 <tr>
-<td><label for="title">List title</label></td>
+<td><label for="name">Gallery name</label></td>
+<td>
+<input name="name" id="name" type="text" value="<?= $name ?>" size="20" />
+</td>
+</tr>
+
+<tr>
+<td colspan="2">
+    Images will be stored in <code><?= $basedir ?>/<i>name</i></code><br />
+    <code>icon.jpg</code> will be the icon for this gallery.
+</td>
+</tr>
+
+<tr>
+<td><label for="title">Gallery title</label></td>
 <td>
 <input name="title" id="title" type="text" value="<?= $title ?>" size="75" />
 </td>
