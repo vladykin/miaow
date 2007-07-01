@@ -61,11 +61,27 @@ class GalleryHandler extends Handler {
     }
 
     public function handleEdit(TreePath $treePath, $params = array()) {
-        return false;
+        $galleryNode = $treePath->getNode();
+        $template = new SkinTemplate('gallery/edit');
+        $template->set('action', '?action=saveEdited');
+        $template->set('name', $galleryNode->getName());
+        $template->set('title', $galleryNode->getTitle());
+        $template->set('isVisible', $galleryNode->getIsVisible());
+        $treePath->popNode();
+        $template->set('basedir', $treePath->getDirectory());
+        $treePath->pushNode($galleryNode);
+        $template->fillAndPrint();
+        return true;
     }
 
     public function handleSaveEdited(TreePath $treePath, $params = array()) {
-        return false;
+        $galleryNode = $treePath->getNode();
+        $galleryNode->setName($_POST['name']);
+        $galleryNode->setTitle($_POST['title']);
+        $galleryNode->setIsVisible(isset($_POST['isVisible']));
+        $result = Tree::persistNode($galleryNode);
+        HTTP::seeOther($treePath->toURL());
+        return $result;
     }
 
     public function handleCreate(TreePath $treePath, $params = array()) {
@@ -79,11 +95,25 @@ class GalleryHandler extends Handler {
     }
 
     public function xhandleCreate(TreePath $treePath, $params = array()) {
-        return false;
+        $template = new SkinTemplate('gallery/create');
+        $template->set('typeName', 'Gallery');
+        $template->set('action', '?action=saveCreated');
+        $template->set('basedir', $treePath->getDirectory());
+        $template->fillAndPrint();
+        return true;
     }
 
     public function xhandleSaveCreated(TreePath $treePath, $params = array()) {
-        return false;
+        $galleryNode = new TreeNode();
+        $galleryNode->setName($_POST['name']);
+        $galleryNode->setTitle($_POST['title']);
+        $galleryNode->setTypeName($_POST['typeName']);
+        $galleryNode->setHasOwnDir(true);
+        $galleryNode->setIsVisible(isset($_POST['isVisible']));
+        $galleryNode->setProperty('icon', 'icon.jpg');
+        $result = Tree::persistNode($galleryNode, $treePath);
+        HTTP::seeOther($treePath->toURL());
+        return $result;
     }
 
 }

@@ -32,7 +32,7 @@ class ImageHandler extends Handler {
         $imageNode = $treePath->getNode();
         $imageNode->setName($_POST['name']);
         $imageNode->setTitle($_POST['title']);
-        $imageNode->setIsVisible($_POST['isVisible'] === '1');
+        $imageNode->setIsVisible(isset($_POST['isVisible']));
         $imageNode->setProperty('src', $imageNode->getName() . '.jpg');
         $imageNode->setProperty('icon', $imageNode->getName() . 's.jpg');
         $imageNode->setProperty('authors', $_POST['authors']);
@@ -56,7 +56,7 @@ class ImageHandler extends Handler {
         $imageNode->setTitle(strlen($_POST['title'])? $_POST['title'] : $_POST['name']);
         $imageNode->setTypeName($_POST['typeName']);
         $imageNode->setHasOwnDir(false);
-        $imageNode->setIsVisible($_POST['isVisible'] === '1');
+        $imageNode->setIsVisible(isset($_POST['isVisible']));
         $imageNode->setProperty('src', $imageNode->getName() . '.jpg');
         $imageNode->setProperty('icon', $imageNode->getName() . 's.jpg');
         $imageNode->setProperty('authors', $_POST['authors']);
