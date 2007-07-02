@@ -87,6 +87,21 @@ abstract class Handler {
         }
     }
 
+    public function handleDelete(TreePath $treePath, $params = array()) {
+        $treeNode = $treePath->getNode();
+        if (@$_POST['confirm'] == 'yes') {
+            $result = Tree::removeNode($treeNode, true);
+            $treePath->popNode();
+            HTTP::seeOther($treePath->toURL());
+        } else {
+            $template = new SkinTemplate('admin/delete');
+            $template->set('treePath', $treePath);
+            $template->set('treeNode', $treeNode);
+            $template->fillAndPrint();
+            return true;
+        }
+    }
+
     /**
      * Called to save the newly created child of this node.
      * Passes control to appropriate handler's xhandleSaveCreated().
@@ -101,97 +116,5 @@ abstract class Handler {
     }
 
 }
-
-
-/**
- * Helper class with default implementations of some methods.
- */
-/*
-abstract class DefaultHandler {
-
-    public function handleEdit(TreePath $treePath, $params = array()) {
-        $treeNode = $treePath->getNode();
-        $properties = $this->getProperties($treePath);
-        if (empty($_POST)) {
-            $template = new SkinTemplate('admin/node_edit', array(
-                'action' => '?action=edit',
-                'properties' => $properties
-            ));
-            $template->fillAndPrint();
-        } else {
-            foreach ($properties as &$property) {
-                $result = $property->parseValue(@$_POST[$property->getName()]);
-                //assert('$result === true');
-                switch ($property->getName()) {
-                case 'name':
-                    $treeNode->setName($property->getValue());
-                    break;
-                case 'title':
-                    $treeNode->setTitle($property->getValue());
-                    break;
-                case 'typeName':
-                    $treeNode->setTypeName($property->getValue());
-                    break;
-                case 'hasOwnDir':
-                    $treeNode->setHasOwnDir($property->getValue());
-                    break;
-                default:
-                    $treeNode->setProperty($property->getName(), $property->getValue());
-                }
-            }
-            assert('Tree::persistNode($treeNode) === true');
-            HTTP::seeOther(SITE_URL . '/index.php/' . $treePath->toString());
-        }
-        return true;
-    }
-
-    public function handleNewChild(TreePath $treePath, $params = array()) {
-        if (empty($_POST)) {
-            $template = new SkinTemplate('admin/node_create', array(
-                'action' => '?action=child',
-                'nextpage' => 1,
-                'properties' => array(
-                    new TextProperty('Name', 'name', ''),
-                    new OwnDirectoryProperty(true),
-                    new SelectProperty('Type', 'typeName', 'Article', HandlerFactory::getKnownTypes())
-                )
-            ));
-            $template->fillAndPrint();
-        } elseif (@$_POST['page'] == 1) {
-            $newNode = new TreeNode();
-            $knownTypes = HandlerFactory::getKnownTypes();
-            $newNode->setTypeName($knownTypes[$_POST['typeName']]);
-            $newNode->setName($_POST['name']);
-            $newNode->setHasOwnDir($_POST['hasOwnDir']);
-            $treePath->pushNode($newNode);
-            $handler = HandlerFactory::getHandler($newNode->getTypeName());
-            $handler->setDefaults($treePath);
-            $template = new SkinTemplate('admin/node_edit', array(
-                'action' => '?action=child',
-                'nextpage' => 2,
-                'properties' => $handler->getProperties($treePath)
-            ));
-            $template->fillAndPrint();
-        } else {
-            $newNode = new TreeNode();
-            $knownTypes = HandlerFactory::getKnownTypes();
-            $newNode->setTypeName($knownTypes[$_POST['typeName']]);
-            $newNode->setName($_POST['name']);
-            $newNode->setHasOwnDir($_POST['hasOwnDir']);
-            $treePath->pushNode($newNode);
-            $handler = HandlerFactory::getHandler($newNode->getTypeName());
-            $handler->setDefaults($treePath);
-            $template = new SkinTemplate('admin/node_edit', array(
-                'action' => '?action=child',
-                'nextpage' => 2,
-                'properties' => $handler->getProperties($treePath)
-            ));
-            $template->fillAndPrint();            
-        }
-        return true;
-    }
-
-}
-*/
 
 ?>
