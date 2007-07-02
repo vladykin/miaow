@@ -49,7 +49,7 @@ class ArticleHandler extends Handler {
         $template = new SkinTemplate('article/edit');
         $template->set('treePath', $treePath);
         $template->set('article', $article);
-        $template->set('action', '?action=editSave');
+        $template->set('action', '?action=saveEdited');
         $template->set('title', $article->getTitle());
         $template->set('isVisible', $article->getIsVisible());
         $template->set('file', $article->getProperty('file'));
@@ -60,7 +60,7 @@ class ArticleHandler extends Handler {
     public function handleSaveEdited(TreePath $treePath, $params = array()) {
         $article = $treePath->getNode();
         $article->setTitle((string)@$_POST['title']);
-        $article->setIsVisible((bool)@$_POST['isVisible']);
+        $article->setIsVisible(isset($_POST['isVisible']));
         $article->setProperty('file', (string)@$_POST['file']);
         $result = Tree::persistNode($article);
         HTTP::seeOther($treePath->toURL());

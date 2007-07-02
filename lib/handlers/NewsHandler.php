@@ -19,16 +19,16 @@ class NewsHandler extends Handler {
     public function handle(TreePath $treePath, $params = array()) {
         $treeNode = $treePath->getNode();
         $directory = $treePath->getDirectory();
-        $file = $treeNode->getProperty('file');
+//        $file = $treeNode->getProperty('file');
         $transformer = new LinkTransformer(TREE_ROOT, '?');
-        if ($file) {
-            $parser = new XhtmlParser();
-            $parser->parseFile($file, $transformer);
-            $content = $parser->getContent();
-        } else {
+//        if ($file) {
+//            $parser = new XhtmlParser();
+//            $parser->parseFile($file, $transformer);
+//            $content = $parser->getContent();
+//        } else {
             $parser = new TextParser();
-            $content = $parser->parse($treeNode->getProperty('preview'), $transformer);
-        }
+            $content = $parser->parse($treeNode->getProperty('text'), $transformer);
+//        }
         $template = new SkinTemplate('news/main');
         $template->set('treePath', $treePath);
         $template->set('treeNode', $treeNode);
@@ -47,7 +47,7 @@ class NewsHandler extends Handler {
         $transformer = new LinkTransformer(SITE_URL . '/index.php', '?');
         $t = new SkinTemplate('news/preview');
         $t->set('treePath', $treePath);
-        $t->set('content', $parser->parse($treeNode->getProperty('preview'), $transformer));
+        $t->set('content', $parser->parse($treeNode->getProperty('text'), $transformer));
         return $t->fillAndReturn();
     }
 
@@ -56,11 +56,10 @@ class NewsHandler extends Handler {
         $template = new SkinTemplate('news/edit');
         $template->set('treePath', $treePath);
         $template->set('news', $news);
-        $template->set('action', '?action=editSave');
+        $template->set('action', '?action=saveEdited');
         $template->set('title', $news->getTitle());
         $template->set('isVisible', $news->getIsVisible());
-        $template->set('preview', $news->getProperty('preview'));
-        $template->set('file', $news->getProperty('file'));
+        $template->set('text', $news->getProperty('text'));
         $template->fillAndPrint();
         return true;
     }
@@ -68,20 +67,35 @@ class NewsHandler extends Handler {
     public function handleSaveEdited(TreePath $treePath, $params = array()) {
         $news = $treePath->getNode();
         $news->setTitle((string)@$_POST['title']);
-        $news->setIsVisible((bool)@$_POST['isVisible']);
-        $news->setProperty('preview', (string)@$_POST['preview']);
-        $news->setProperty('file', (string)@$_POST['file']);
+        $news->setIsVisible(isset($_POST['isVisible']));
+        $news->setProperty('text', (string)@$_POST['text']);
+//        $news->setProperty('file', (string)@$_POST['file']);
         $result = Tree::persistNode($news);
+        $treePath->popNode();
         HTTP::seeOther($treePath->toURL());
+        $treePath->pushNode($news);
         return $result;
     }
 
     public function xhandleCreate(TreePath $treePath, $params = array()) {
-        return false;
+        $template = new SkinTemplate('news/create');
+        $template->set('typeName', 'News');
+        $template->set('action', '?action=saveCreated');
+        $template->fillAndPrint();
+        return true;
     }
 
     public function xhandleSaveCreated(TreePath $treePath, $params = array()) {
-        return false;
+        $news = new TreeNode();
+        $news->setName($_POST['name']);
+        $news->setTitle($_POST['title']);
+        $news->setTypeName($_POST['typeName']);
+        $news->setHasOwnDir(true);
+        $news->setIsVisible(isset($_POST['isVisible']));
+        $news->setProperty('text', $_POST['text']);
+        $result = Tree::persistNode($news, $treePath);
+        HTTP::seeOther($treePath->toURL());
+        return $result;
     }
 
 }

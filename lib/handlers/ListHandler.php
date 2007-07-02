@@ -55,7 +55,7 @@ class ListHandler extends Handler {
         $template = new SkinTemplate('list/edit');
         $template->set('treePath', $treePath);
         $template->set('list', $list);
-        $template->set('action', '?action=editSave');
+        $template->set('action', '?action=saveEdited');
         $template->set('title', $list->getTitle());
         $template->set('isVisible', $list->getIsVisible());
         $template->set('order', $list->getProperty('order'));
