@@ -13,7 +13,7 @@ class TextParser {
             '/(action|archive|href|src)\s*\=\s*\"(.*?)\"/',
             array($this, 'transformLink'),
             $text);
-        $text = preg_replace('/\n{2,}/', "</p>\n<p>", $text);
+        $text = preg_replace('/(\r?\n){2,}/', "</p>\n<p>", $text);
         $text = '<p>' . $text . '</p>';
         return $text;
     }

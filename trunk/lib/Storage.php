@@ -22,6 +22,8 @@ class Storage {
         if (is_null($connection)) {
             $connection = DB::connect(DB_CONNECT_STRING);
             assert('!DB::isError($connection)');
+            $res = $connection->query('SET CHARACTER SET \'utf8\'');
+            assert('!DB::isError($res)');
         }
         return $connection;
     }

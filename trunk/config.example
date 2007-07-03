@@ -40,8 +40,8 @@ ini_set('session.use_cookies', 1);
 ini_set('session.use_only_cookies', 1);
 
 $parsedURL = parse_url(SITE_URL);
-ini_set('session.cookie_domain', $parsedURL['host']);
-ini_set('session.cookie_path', $parsedURL['path']);
+ini_set('session.cookie_domain', @$parsedURL['host']);
+ini_set('session.cookie_path', @$parsedURL['path'] . '/');
 unset($parsedURL);
 
 ini_set('magic_quotes_gpc', 0);
