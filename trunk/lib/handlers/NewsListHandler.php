@@ -55,8 +55,8 @@ class NewsListHandler extends Handler {
         $newslist = $treePath->getNode();
         $template = new SkinTemplate('news/list_edit');
         $template->set('treePath', $treePath);
-        $template->set('article', $newslist);
         $template->set('action', '?action=saveEdited');
+        $template->set('name', $newslist->getName());
         $template->set('title', $newslist->getTitle());
         $template->set('isVisible', $newslist->getIsVisible());
         $template->fillAndPrint();
@@ -65,6 +65,7 @@ class NewsListHandler extends Handler {
 
     public function handleSaveEdited(TreePath $treePath, $params = array()) {
         $newslist = $treePath->getNode();
+        $newslist->setName((string)@$_POST['name']);
         $newslist->setTitle((string)@$_POST['title']);
         $newslist->setIsVisible((bool)@$_POST['isVisible']);
         $result = Tree::persistNode($newslist);

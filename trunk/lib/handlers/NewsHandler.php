@@ -55,8 +55,8 @@ class NewsHandler extends Handler {
         $news = $treePath->getNode();
         $template = new SkinTemplate('news/edit');
         $template->set('treePath', $treePath);
-        $template->set('news', $news);
         $template->set('action', '?action=saveEdited');
+        $template->set('name', $news->getName());
         $template->set('title', $news->getTitle());
         $template->set('isVisible', $news->getIsVisible());
         $template->set('text', $news->getProperty('text'));
@@ -66,6 +66,7 @@ class NewsHandler extends Handler {
 
     public function handleSaveEdited(TreePath $treePath, $params = array()) {
         $news = $treePath->getNode();
+        $news->setName((string)@$_POST['name']);
         $news->setTitle((string)@$_POST['title']);
         $news->setIsVisible(isset($_POST['isVisible']));
         $news->setProperty('text', (string)@$_POST['text']);

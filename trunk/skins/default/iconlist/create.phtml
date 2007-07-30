@@ -3,33 +3,42 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Edit list properties</title>
+<title>Specify list properties</title>
 </head>
 <body>
 
 <form action="<?= $action ?>" method="post">
 <fieldset>
-<legend>Edit list properties</legend>
+<legend>Specify list properties</legend>
+<input name="typeName" type="hidden" value="<?= $typeName ?>" />
+
 <table>
 
 <tr>
-<td><label for="title">List name</label></td>
+<td><label for="name">List name</label></td>
 <td>
-<input name="name" id="name" type="text" value="<?= $name ?>" size="20" />
+<input name="name" id="name" type="text" size="20" />
 </td>
 </tr>
 
 <tr>
-<td><label for="title">News title</label></td>
+<td colspan="2">
+    Files will be stored in <code><?= $basedir ?>/<i>name</i></code>.<br />
+    <code>icon.jpg</code> will be the icon for this list.
+</td>
+</tr>
+
+<tr>
+<td><label for="title">List title</label></td>
 <td>
-<input name="title" id="title" type="text" value="<?= $title ?>" size="75" />
+<input name="title" id="title" type="text" size="75" />
 </td>
 </tr>
 
 <tr>
 <td><label for="isVisible">Is visible?</label></td>
 <td>
-<input name="isVisible" id="isVisible" type="checkbox"<? if ($isVisible) echo(" checked=\"checked\""); ?> />
+<input name="isVisible" id="isVisible" type="checkbox" checked="checked" />
 </td>
 </tr>
 
