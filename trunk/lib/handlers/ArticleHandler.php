@@ -68,11 +68,26 @@ class ArticleHandler extends Handler {
     }
 
     public function xhandleCreate(TreePath $treePath, $params = array()) {
-        return false;
+        $template = new SkinTemplate('article/create');
+        $template->set('typeName', 'Article');
+        $template->set('action', '?action=saveCreated');
+        $template->set('treePath', $treePath);
+        $template->fillAndPrint();
+        return true;
     }
 
     public function xhandleSaveCreated(TreePath $treePath, $params = array()) {
-        return false;
+        $articleNode = new TreeNode();
+        $articleNode->setName($_POST['name']);
+        $articleNode->setTitle($_POST['title']);
+        $articleNode->setTypeName($_POST['typeName']);
+        $articleNode->setHasOwnDir(isset($_POST['hasOwnDir']));
+        $articleNode->setIsVisible(isset($_POST['isVisible']));
+        $articleNode->setProperty('file', $articleNode->getHasOwnDir()?
+                'index.html' : $articleNode->getName() . '.html');
+        $result = Tree::persistNode($articleNode, $treePath);
+        HTTP::seeOther($treePath->toURL());
+        return $result;
     }
 
 }
