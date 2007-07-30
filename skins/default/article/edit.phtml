@@ -13,6 +13,13 @@
 <table>
 
 <tr>
+<td><label for="name">Article name</label></td>
+<td>
+<input name="name" id="name" type="text" value="<?= $name ?>" size="20" />
+</td>
+</tr>
+
+<tr>
 <td><label for="title">Article title</label></td>
 <td>
 <input name="title" id="title" type="text" value="<?= $title ?>" size="75" />
@@ -23,13 +30,6 @@
 <td><label for="isVisible">Is visible?</label></td>
 <td>
 <input name="isVisible" id="isVisible" type="checkbox"<? if ($isVisible) echo(" checked=\"checked\""); ?> />
-</td>
-</tr>
-
-<tr>
-<td><label for="file">File</label></td>
-<td>
-<?= $treePath->toString() ?>/<input name="file" id="file" type="text" value="<?= $file ?>" size="75" />
 </td>
 </tr>
 

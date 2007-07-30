@@ -54,8 +54,8 @@ class ListHandler extends Handler {
         $list = $treePath->getNode();
         $template = new SkinTemplate('list/edit');
         $template->set('treePath', $treePath);
-        $template->set('list', $list);
         $template->set('action', '?action=saveEdited');
+        $template->set('name', $list->getName());
         $template->set('title', $list->getTitle());
         $template->set('isVisible', $list->getIsVisible());
         $template->set('order', $list->getProperty('order'));
@@ -65,6 +65,7 @@ class ListHandler extends Handler {
 
     public function handleSaveEdited(TreePath $treePath, $params = array()) {
         $list = $treePath->getNode();
+        $list->setName((string)@$_POST['name']);
         $list->setTitle((string)@$_POST['title']);
         $list->setIsVisible((bool)@$_POST['isVisible']);
         $list->setProperty('order', (string)@$_POST['order']);
