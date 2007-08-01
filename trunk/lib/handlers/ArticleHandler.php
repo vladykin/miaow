@@ -25,7 +25,7 @@ class ArticleHandler extends Handler {
         $template->set('treeNode', $treeNode);
         $template->set('content', $parser->getContent());
         $template->set('authors', $treeNode->getAuthors());
-        if ($treeNode->getProperty('listChildren') || Session::isPrivileged()) {
+        if ($treeNode->getProperty('listChildren')) {
             $db = Storage::getConnection();
             $query = 'SELECT * FROM ! WHERE parentId = ? AND (isVisible || ?)';
             $res = $db->getAll($query, array(TreeNode::getTableName(), $treeNode->getId(), Session::isPrivileged()));
@@ -53,6 +53,7 @@ class ArticleHandler extends Handler {
         $template->set('title', $article->getTitle());
         $template->set('isVisible', $article->getIsVisible());
         $template->set('hasOwnDir', $article->getHasOwnDir());
+        $template->set('listChildren', $article->getProperty('listChildren'));
         $template->fillAndPrint();
         return true;
     }
@@ -64,6 +65,7 @@ class ArticleHandler extends Handler {
         $article->setIsVisible(isset($_POST['isVisible']));
         $article->setProperty('file', $article->getHasOwnDir()?
                 'index.html' : $article->getName() . '.html');
+        $article->setProperty('listChildren', isset($_POST['listChildren']));
         $result = Tree::persistNode($article);
         HTTP::seeOther($treePath->toURL());
         return $result;
@@ -87,6 +89,7 @@ class ArticleHandler extends Handler {
         $articleNode->setIsVisible(isset($_POST['isVisible']));
         $articleNode->setProperty('file', $articleNode->getHasOwnDir()?
                 'index.html' : $articleNode->getName() . '.html');
+        $articleNode->setProperty('listChildren', isset($_POST['listChildren']));
         $result = Tree::persistNode($articleNode, $treePath);
         HTTP::seeOther($treePath->toURL());
         return $result;
