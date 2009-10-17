@@ -1,8 +1,0 @@
-#summary Miaow plans and current activities
-
-= Current activities =
-
-Current driver for Miaow development is numkod.com - the first site that decided to use Miaow.
-
-= Future plans =
-  * Migrate from PEAR::DB to PDO
