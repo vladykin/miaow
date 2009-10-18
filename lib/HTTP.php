@@ -2,7 +2,7 @@
 
 // $Id$
 
-require_once('lib/Templates.php');
+require_once(LIB_DIR . '/Templates.php');
 
 /**
  * HTTP support functions.

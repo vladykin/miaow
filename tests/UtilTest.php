@@ -2,14 +2,15 @@
 
 // $Id$
 
-require_once('PHPUnit/Framework/TestCase.php');
+require_once('../config.php');
+require_once(LIB_DIR . '/Util.php');
 
-require_once('lib/Util.php');
+require_once('PHPUnit/Framework.php');
 
 /**
  * Test class for Util.
  */
-class tests_UtilTest extends PHPUnit_TestCase {
+class UtilTest extends PHPUnit_Framework_TestCase {
 
     function testIsValidName() {
         $this->assertTrue(Util::isValidName('x'));

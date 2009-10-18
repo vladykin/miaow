@@ -2,9 +2,9 @@
 
 // $Id$
 
-require_once('lib/Storage.php');
-require_once('lib/TreeNode.php');
-require_once('lib/TreePath.php');
+require_once(LIB_DIR . '/Storage.php');
+require_once(LIB_DIR . '/TreeNode.php');
+require_once(LIB_DIR . '/TreePath.php');
 
 class Tree {
 

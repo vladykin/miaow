@@ -2,14 +2,15 @@
 
 // $Id$
 
-require_once('PHPUnit/Framework/TestCase.php');
+require_once('../config.php');
+require_once(LIB_DIR . '/TreeNode.php');
 
-require_once('lib/TreeNode.php');
+require_once('PHPUnit/Framework.php');
 
 /**
  * Test class for TreeNode.
  */
-class tests_TreeNodeTest extends PHPUnit_TestCase {
+class TreeNodeTest extends PHPUnit_Framework_TestCase {
 
     function setUp() {
         EntityManager::installEntityClass('TreeNode');

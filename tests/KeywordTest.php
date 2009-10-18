@@ -2,14 +2,15 @@
 
 // $Id$
 
-require_once('PHPUnit/Framework/TestCase.php');
+require_once('../config.php');
+require_once(LIB_DIR . '/Keyword.php');
 
-require_once('lib/Keyword.php');
+require_once('PHPUnit/Framework.php');
 
 /**
  * Test class for Keyword.
  */
-class tests_KeywordTest extends PHPUnit_TestCase {
+class KeywordTest extends PHPUnit_Framework_TestCase {
 
     function setUp() {
         EntityManager::installEntityClass('Keyword');

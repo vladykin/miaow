@@ -2,9 +2,9 @@
 
 // $Id$
 
-require_once('lib/Entity.php');
-require_once('lib/Relation.php');
-require_once('lib/Util.php');
+require_once(LIB_DIR . '/Entity.php');
+require_once(LIB_DIR . '/Relation.php');
+require_once(LIB_DIR . '/Util.php');
 
 class User extends Entity {
 

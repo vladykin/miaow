@@ -2,7 +2,7 @@
 
 // $Id$
 
-require_once('lib/Storage.php');
+require_once(LIB_DIR . '/Storage.php');
 
 class Field {
     var $name;
@@ -229,6 +229,8 @@ class EntityManager {
         eval('$tableName = ' . $entityClass . '::getTableName();');
         eval('$fields = ' . $entityClass . '::getFields();');
         eval('$pk = ' . $entityClass . '::getPrimaryKeyField();');
+        $res = $db->query('DROP TABLE IF EXISTS `' . $tableName . '`');
+        assert('!DB::isError($res)');
         $query = 'CREATE TABLE `' . $tableName . '` (';
         foreach ($fields as $field) {
             $query .= '`' . $field->getName() . '` ' . $field->getDecl() . ', ';
@@ -242,6 +244,7 @@ class EntityManager {
         $query .= ')';
         $res = $db->query($query);
         assert('!DB::isError($res)');
+        $db->dropSequence($tableName); // don't check result, because missing sequence is reported as error
         $res = $db->createSequence($tableName);
         assert('!DB::isError($res)');
     }
