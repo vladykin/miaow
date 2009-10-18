@@ -1,13 +1,28 @@
-#summary What you need to run Miaow
+#summary Playing with Miaow for the first time
 
-You need a hosting with:
-  * PHP 5,
-  * PEAR with DB package,
-  * MySQL,
-  * (optionally) PHPUnit 1.3.2 to run unit tests.
+=Requirements=
 
-Most Linux boxes already have all these installed, except PHPUnit. Here are two ways to get it:
-  * install it with PEAR installer (see instructions [http://www.phpunit.de/pocket_guide/3.0/en/appendixes.phpunit1.html here]),
-  * download it from http://pear.phpunit.de/get/PHPUnit-1.3.2.tgz and extract PHPUnit.php and PHPUnit/ directory into Miaow directory.
+  * PHP 5
+  * PEAR with DB package (to be replaced with PDO soon, see [issue:11])
+  * MySQL (other databases could work to, but we never tested)
+  * PHPUnit 1.3.2, if you want to run the unit tests (to be replaced with PHPUnit 3, see [issue:8])
+
+Most Linux boxes already have all these installed, except PHPUnit. Refer to [http://www.phpunit.de/manual/current/en/installation.html PHPUnit installation instructions].
 
 On Windows you may use one of those all-on-one web-server distributions, for example [http://vertrigo.sourceforge.net/ VertrigoServ]. In this case PEAR packages have to be installed manually.
+
+
+=Getting Miaow=
+
+Checkout Miaow sources from Subversion repository: http://code.google.com/p/miaow/source/checkout
+
+We do not provide tarballs yet.
+
+
+=Installing Miaow=
+
+   # Copy `config.example` to `config.php` and edit the latter file to match your environment.
+   # `SITE_URL`, `SKIN`, `DB_CHARSET`, `DB_CONNECT_STRING` must be set in `config.php`. Specified database and user must exist.
+   # Run `install.php` by typing `SITE_URL/install.php` in your browser. If no errors show up, Miaow is installed successfully.
+   # Verify installation by running tests. Open `SITE_URL/test.php` in your browser.
+   # Open `SITE_URL/index.php` in your browser. This is your website's front page.
