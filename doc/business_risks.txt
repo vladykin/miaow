@@ -1,7 +1,0 @@
-RI-1:
-    Interference with primary work leading to little time left
-    for Miaow development. (Probability = 0.8, Impact = 9)
-
-RI-2:
-    A CMS with all required features already exist.
-    (Probability = 0.2, Impact = 5)
