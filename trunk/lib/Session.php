@@ -2,9 +2,9 @@
 
 // $Id$
 
-require_once('lib/HTTP.php');
-require_once('lib/Storage.php');
-require_once('lib/User.php');
+require_once(LIB_DIR . '/HTTP.php');
+require_once(LIB_DIR . '/Storage.php');
+require_once(LIB_DIR . '/User.php');
 
 session_start();
 

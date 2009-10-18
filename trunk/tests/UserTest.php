@@ -2,14 +2,15 @@
 
 // $Id$
 
-require_once('PHPUnit/Framework/TestCase.php');
+require_once('../config.php');
+require_once(LIB_DIR . '/User.php');
 
-require_once('lib/User.php');
+require_once('PHPUnit/Framework.php');
 
 /**
  * Test class for User.
  */
-class tests_UserTest extends PHPUnit_TestCase {
+class UserTest extends PHPUnit_Framework_TestCase {
 
     function setUp() {
         EntityManager::installEntityClass('User');

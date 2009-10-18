@@ -2,7 +2,7 @@
 
 // $Id$
 
-require_once('lib/Storage.php');
+require_once(LIB_DIR . '/Storage.php');
 
 /*
 interface Relation {

@@ -2,7 +2,7 @@
 
 // $Id$
 
-require_once('lib/Storage.php');
+require_once(LIB_DIR . '/Storage.php');
 
 class Cache {
 
@@ -39,9 +39,11 @@ class Cache {
 
     function install() {
         $db = Storage::getConnection();
+        $res = $db->query('DROP TABLE IF EXISTS `' . TABLE_PREFIX . 'Cache`');
+        assert('!DB::isError($res)');
         $res = $db->query(
             'CREATE TABLE `' . TABLE_PREFIX . 'Cache` (' .
-            'name VARCHAR(128) NOT NULL UNIQUE,' .
+            'name VARCHAR(128) NOT NULL PRIMARY KEY,' .
             'value TEXT NOT NULL)'
         );
         assert('!DB::isError($res)');

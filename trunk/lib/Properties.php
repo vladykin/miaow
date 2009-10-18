@@ -2,7 +2,7 @@
 
 // $Id$
 
-require_once('lib/Util.php');
+require_once(LIB_DIR . '/Util.php');
 
 abstract class Property {
 

@@ -2,14 +2,15 @@
 
 // $Id$
 
-require_once('PHPUnit/Framework/TestCase.php');
+require_once('../config.php');
+require_once(LIB_DIR . '/Cache.php');
 
-require_once('lib/Cache.php');
+require_once('PHPUnit/Framework.php');
 
 /**
  * Test class for Cache.
  */
-class tests_CacheTest extends PHPUnit_TestCase {
+class CacheTest extends PHPUnit_Framework_TestCase {
 
     function setUp() {
         Cache::install();
