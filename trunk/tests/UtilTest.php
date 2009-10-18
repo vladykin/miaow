@@ -2,7 +2,7 @@
 
 // $Id$
 
-require_once('PHPUnit/TestCase.php');
+require_once('PHPUnit/Framework/TestCase.php');
 
 require_once('lib/Util.php');
 
