@@ -3,9 +3,9 @@
 =Requirements=
 
   * PHP 5
-  * PEAR with DB package (to be replaced with PDO soon, see [issue:11])
+  * PEAR with DB package (to be replaced with PDO soon, see issue 11)
   * MySQL (other databases could work to, but we never tested)
-  * PHPUnit 1.3.2, if you want to run the unit tests (to be replaced with PHPUnit 3, see [issue:8])
+  * PHPUnit 3, if you want to run the unit tests
 
 Most Linux boxes already have all these installed, except PHPUnit. Refer to [http://www.phpunit.de/manual/current/en/installation.html PHPUnit installation instructions].
 
@@ -24,5 +24,5 @@ We do not provide tarballs yet.
    # Copy `config.example` to `config.php` and edit the latter file to match your environment.
    # `SITE_URL`, `SKIN`, `DB_CHARSET`, `DB_CONNECT_STRING` must be set in `config.php`. Specified database and user must exist.
    # Run `install.php` by typing `SITE_URL/install.php` in your browser. If no errors show up, Miaow is installed successfully.
-   # Verify installation by running tests. Open `SITE_URL/test.php` in your browser.
+   # Verify installation by running tests: `cd tests && for f in *.php; do phpunit $f; done`
    # Open `SITE_URL/index.php` in your browser. This is your website's front page.
