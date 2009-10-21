@@ -19,7 +19,7 @@ class Storage {
     function &getConnection() {
 
 try {
-    $dbh = new PDO("mysql:host=$dbhost;dbname=$dbname", $login, $pass);
+    $dbh = new PDO("mysql:host=" .DB_HOST. ";dbname=".DB_NAME."", DB_LOGIN, DB_PASS);
     /*** echo a message saying we have connected ***/
     echo 'Connected to database';
 
