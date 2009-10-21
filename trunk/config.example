@@ -18,10 +18,15 @@ define('SITE_URL', '@SITE_URL@');
 // E.g. KOI8-R
 define('DB_CHARSET', '@DB_CHARSET@');
 
-// Database connection string.
-// E.g. mysql://user:pass@host/dbname (see PEAR::DB docs for details)
-define('DB_CONNECT_STRING', '@DB_CONNECT_STRING@');
+// Database connection.
 
+
+define('DB_HOST', '@DB_HOST@'); // host e.g. localhost
+define('DB_NAME', '@DB_NAME@'); // db_name e.g. miaow
+define('DB_LOGIN', '@DB_LOGIN@'); // login e.g. root
+define('DB_PASS', '@DB_PASS@'); // password
+//
+//
 // Site skin - page layout, colors, buttons and so on.
 // Must point to a directory where the skin is installed.
 define('SKIN', 'skins/default');
