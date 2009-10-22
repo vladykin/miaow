@@ -2,6 +2,7 @@
 
 // $Id$
 
+require_once('DB.php');
 
 /**
  * Provides database connection and some helpful methods.
@@ -17,18 +18,14 @@ class Storage {
      * @access public static
      */
     function &getConnection() {
-
-try {
-    $dbh = new PDO("mysql:host=" .DB_HOST. ";dbname=".DB_NAME."", DB_LOGIN, DB_PASS);
-    /*** echo a message saying we have connected ***/
-    echo 'Connected to database';
-
-    }
-catch(PDOException $e)
-    {
-    echo $e->getMessage();
-    }
-    return $dbh;
+        static $connection = null;
+        if (is_null($connection)) {
+            $connection = DB::connect(DB_CONNECT_STRING);
+            assert('!DB::isError($connection)');
+            //$res = $connection->query('SET CHARACTER SET \'utf8\'');
+            //assert('!DB::isError($res)');
+        }
+        return $connection;
     }
 
     /**
