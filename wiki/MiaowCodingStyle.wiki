@@ -1,0 +1,5 @@
+#summary Miaow code conventions
+
+Discussion of revision 72 shows that such document would be useful.
+
+But it's not written yet.
